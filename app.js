@@ -189,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initGazetteForm();
     initPopupForm();
     initVideoPlayer();
+    initReviewsCarousel();
     updateFavoritesBadge();
     
     // Splash screen fadeout timer
@@ -1362,9 +1363,9 @@ function initVideoPlayer() {
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
-        // Draw subtitle band overlay
+        // Draw subtitle band overlay (raised to avoid collision with bottom timeline controls)
         ctx.fillStyle = 'rgba(31, 25, 22, 0.75)';
-        ctx.fillRect(0, canvas.height - 110, canvas.width, 110);
+        ctx.fillRect(0, canvas.height - 165, canvas.width, 100);
 
         // Find active subtitle text matching current time
         const activeSub = subtitles.find(s => currentT >= s.start && currentT < s.end);
@@ -1372,7 +1373,7 @@ function initVideoPlayer() {
             ctx.fillStyle = '#FCFAF6';
             ctx.font = '700 32px Outfit, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText(activeSub.text, canvas.width / 2, canvas.height - 48);
+            ctx.fillText(activeSub.text, canvas.width / 2, canvas.height - 105);
         }
 
         // Draw a simulated pulsing "Live Visualizer" audio track animation at bottom left when playing
@@ -1456,6 +1457,111 @@ function initVideoPlayer() {
     }
 }
 
+// 15. CLIENT TESTIMONIALS CAROUSEL
+function initReviewsCarousel() {
+    const track = document.getElementById('reviews-carousel-track');
+    const dotsContainer = document.getElementById('reviews-carousel-dots');
+    if (!track || !dotsContainer) return;
+
+    const reviews = [
+        {
+            stars: 5,
+            quote: "Kameron helped us navigate a highly competitive bidding war in the Heights. His local market knowledge and strategic counsel were invaluable. We got our dream home under budget!",
+            author: "Sarah & Michael T.",
+            location: "The Heights, Houston"
+        },
+        {
+            stars: 5,
+            quote: "Kameron is the consummate professional. He listed my property and had multiple cash offers within 48 hours. His marketing plan and attention to detail are unmatched.",
+            author: "David L.",
+            location: "River Oaks, Houston"
+        },
+        {
+            stars: 5,
+            quote: "As first-time home buyers, we were nervous about the process. Kameron was incredibly patient, explaining every document and helping us secure a great mortgage rate.",
+            author: "Elena R.",
+            location: "Sugar Land, TX"
+        },
+        {
+            stars: 5,
+            quote: "I have worked with several realtors over the years, and Kameron stands out. His advisory philosophy isn't just about selling houses; it's about building lasting family investments.",
+            author: "Dr. Marcus V.",
+            location: "Memorial, Houston"
+        },
+        {
+            stars: 5,
+            quote: "Relocating from out of state was stressful, but Kameron made it seamless. He did virtual video tours and coordinated everything perfectly. We highly recommend All City Real Estate!",
+            author: "The Henderson Family",
+            location: "Pearland, TX"
+        }
+    ];
+
+    // Render review slides
+    track.innerHTML = reviews.map(rev => `
+        <div class="review-slide">
+            <div class="review-stars">${"★".repeat(rev.stars)}</div>
+            <p class="review-quote">"${rev.quote}"</p>
+            <div class="review-author">${rev.author}</div>
+            <div class="review-location">${rev.location}</div>
+        </div>
+    `).join('');
+
+    // Render dots
+    dotsContainer.innerHTML = reviews.map((_, idx) => `
+        <button class="carousel-dot ${idx === 0 ? 'active' : ''}" data-idx="${idx}" aria-label="Go to slide ${idx + 1}"></button>
+    `).join('');
+
+    let currentSlide = 0;
+    let autoPlayInterval = null;
+
+    function goToSlide(idx) {
+        currentSlide = idx;
+        // Shift track by percentage
+        track.style.transform = `translateX(-${idx * 100}%)`;
+
+        // Update dot states
+        const dots = dotsContainer.querySelectorAll('.carousel-dot');
+        dots.forEach((dot, dIdx) => {
+            if (dIdx === idx) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function nextSlide() {
+        let nextIdx = currentSlide + 1;
+        if (nextIdx >= reviews.length) {
+            nextIdx = 0;
+        }
+        goToSlide(nextIdx);
+    }
+
+    // Dot event listeners
+    dotsContainer.addEventListener('click', (e) => {
+        const dot = e.target.closest('.carousel-dot');
+        if (!dot) return;
+        const idx = parseInt(dot.getAttribute('data-idx'));
+        goToSlide(idx);
+        resetAutoPlay();
+    });
+
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(nextSlide, 4500); // 4.5s slide interval
+    }
+
+    function resetAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+        }
+        startAutoPlay();
+    }
+
+    // Initialize auto play
+    startAutoPlay();
+}
+
 // Global exposure of navigation helpers for inline HTML button triggers
 window.navigateTo = navigateTo;
 window.toggleFavorite = toggleFavorite;
@@ -1475,3 +1581,4 @@ window.handleLogout = handleLogout;
 window.openLegalModal = openLegalModal;
 window.closeLegalModal = closeLegalModal;
 window.initVideoPlayer = initVideoPlayer;
+window.initReviewsCarousel = initReviewsCarousel;
