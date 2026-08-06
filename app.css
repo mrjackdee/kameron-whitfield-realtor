@@ -815,7 +815,7 @@ body {
 .editorial-lead-card {
     background-color: #8A1C2E;
     color: #FFFFFF;
-    padding: 22px;
+    padding: 18px;
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-premium);
     text-align: center;
@@ -866,7 +866,7 @@ body {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-md);
-    padding: 22px;
+    padding: 16px;
     box-shadow: var(--shadow-premium);
     text-align: center;
 }
@@ -2153,7 +2153,7 @@ body {
     
     /* Reset main content container bottom offset */
     .app-content {
-        padding-bottom: 24px;
+        padding-bottom: 16px;
     }
 
     /* Display header desktop navigation */
@@ -2215,22 +2215,22 @@ body {
         min-height: 100vh;
     }
 
-    /* Home View - Grid adjustments */
+    /* Home View - Horizontal hero */
     .hero-section {
-        padding: 28px 24px;
+        padding: 20px;
     }
 
     .hero-content-wrapper {
         flex-direction: row;
         text-align: left;
         align-items: center;
-        gap: 24px;
-        padding: 22px 28px;
+        gap: 20px;
+        padding: 18px 24px;
     }
 
     .hero-avatar-container {
-        width: 140px;
-        height: 140px;
+        width: 120px;
+        height: 120px;
     }
 
     .hero-info {
@@ -2241,7 +2241,7 @@ body {
     .listings-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 14px;
     }
 
     .listings-sticky-bar {
@@ -2249,8 +2249,8 @@ body {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 20px;
-        padding: 14px 20px;
+        gap: 16px;
+        padding: 10px 20px;
     }
 
     .listings-sticky-bar .search-box {
@@ -2263,7 +2263,7 @@ body {
     #view-calculator .view-padding {
         display: grid;
         grid-template-columns: 1.15fr 0.85fr;
-        gap: 20px;
+        gap: 16px;
         align-items: start;
     }
 
@@ -2272,9 +2272,19 @@ body {
         height: 100%;
     }
 
-    /* Booking consultation form layout */
+    /* Booking consultation form - max-width centered */
     .booking-form-card {
-        padding: 24px;
+        padding: 20px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Success state centered */
+    .success-state {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     /* Bottom Sheet Details Width styling */
@@ -2283,13 +2293,28 @@ body {
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
     }
+
+    /* Constrain home view content cards */
+    .view-padding {
+        padding: 16px 20px;
+    }
+
+    /* Quick contact bar horizontal fit */
+    .quick-contact-bar {
+        justify-content: flex-start;
+    }
+
+    /* Gazette form wider */
+    .gazette-form {
+        max-width: 420px;
+    }
 }
 
 @media (min-width: 1024px) {
     /* Enforce desktop max container width */
     .app-shell {
-        max-width: 1140px;
-        margin: 0 auto;
+        max-width: 960px;
+        margin: 34px auto 0 auto; /* Keep banner offset */
         border-left: 1px solid var(--border-color);
         border-right: 1px solid var(--border-color);
         box-shadow: 0 0 50px rgba(31, 25, 22, 0.1);
@@ -2297,84 +2322,55 @@ body {
 
     /* Header styling adjustments */
     .app-header {
-        padding: 18px 24px;
+        padding: 14px 24px;
     }
     
     .desktop-nav {
-        gap: 24px;
+        gap: 20px;
     }
 
     .view-padding {
-        padding: 24px;
+        padding: 20px 24px;
     }
 
-    /* Home View - Split Columns Dashboard */
+    /* Home page: single column, clean full-width flow */
     #view-home .view-padding {
-        display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
-        gap: 28px;
-        align-items: start;
-    }
-
-    /* Left Column Items layout */
-    #view-home .stats-grid {
-        grid-column: 1;
-    }
-    
-    #view-home .info-section:nth-of-type(1) { /* Bio */
-        grid-column: 1;
-    }
-
-    #view-home .info-section:nth-of-type(2) { /* Video */
-        grid-column: 1;
-    }
-
-    #view-home .info-section:nth-of-type(5) { /* Featured Listing */
-        grid-column: 1;
-    }
-
-    #view-home .social-wrapper {
-        grid-column: 1;
-    }
-
-    /* Right Column Items layout */
-    #view-home .quick-contact-bar {
-        grid-column: 2;
-        grid-row: 1;
+        display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        gap: 0;
+    }
+
+    /* Contact pills stay horizontal row on desktop */
+    #view-home .quick-contact-bar {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    /* Two-column layout for accreditations */
+    .designation-slider {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
-    }
-    
-    #view-home .quick-contact-bar .contact-pill {
-        width: fit-content;
-        padding: 10px 16px;
-        align-self: flex-start;
-    }
-
-    #view-home .info-section:nth-of-type(3) { /* Accreditations */
-        grid-column: 2;
-        grid-row: 2 / span 2;
-    }
-
-    #view-home .info-section:nth-of-type(4) { /* CMA Card */
-        grid-column: 2;
-        grid-row: 4;
-    }
-
-    #view-home .newsletter-section { /* Gazette Card */
-        grid-column: 2;
-        grid-row: 5;
     }
 
     /* Listings Portal - 3 Columns on Desktop */
     .listings-grid {
         grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
+        gap: 16px;
     }
 
     .listings-sticky-bar {
-        padding: 16px 24px;
+        padding: 10px 24px;
+    }
+
+    /* Booking form tighter on desktop */
+    .booking-form-card {
+        max-width: 560px;
+    }
+
+    /* Calculator layout */
+    #view-calculator .view-padding {
+        gap: 16px;
     }
 }
 
