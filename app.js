@@ -176,6 +176,8 @@ const listingsData = [
 let favorites = JSON.parse(localStorage.getItem('kameron_favs')) || [];
 let bookings = JSON.parse(localStorage.getItem('kameron_bookings')) || [];
 let activeFilters = { search: '', category: 'all' };
+let isLoggedIn = sessionStorage.getItem('client_logged_in') === 'true';
+let loggedInUser = sessionStorage.getItem('client_user') || 'client@donora.com';
 
 // 3. INITIALIZATION & ROUTING
 document.addEventListener('DOMContentLoaded', () => {
@@ -283,6 +285,8 @@ function navigateTo(viewId) {
         renderFavorites();
     } else if (viewId === 'book') {
         renderBookedAppointments();
+    } else if (viewId === 'login') {
+        renderPortalView();
     }
 }
 
@@ -1013,7 +1017,6 @@ function openLeadPopup() {
     const popup = document.getElementById('lead-popup');
     if (popup) {
         popup.style.display = 'flex';
-        // Add browser repaint tick to trigger slide-in CSS transitions smoothly
         setTimeout(() => {
             popup.classList.add('open');
         }, 10);
@@ -1031,6 +1034,219 @@ function closeLeadPopup() {
     }
 }
 
+// 12. CLIENT PORTAL & DUMMY LOGIN CONTROLLER
+function renderPortalView() {
+    const container = document.getElementById('portal-view-content');
+    if (!container) return;
+
+    if (!isLoggedIn) {
+        // Render Login Form
+        container.innerHTML = `
+            <div class="booking-form-card" style="max-width:440px; margin:0 auto;">
+                <div style="text-align:center; margin-bottom:20px;">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <h3 style="font-family:var(--font-heading); font-size:1.2rem; font-weight:800;">Advisory Sign-In</h3>
+                    <p style="font-size:0.75rem; color:var(--color-text-sub); margin-top:2px;">Enter your credentials to unlock private valuation assets and show schedules</p>
+                </div>
+                <form id="client-login-form" onsubmit="handleLoginSubmit(event)">
+                    <div class="form-group">
+                        <label for="login-email">Client Email Address</label>
+                        <input type="email" id="login-email" required placeholder="client@donora.com" value="client@donora.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Access Passcode</label>
+                        <input type="password" id="login-password" required placeholder="••••••••" value="password123">
+                    </div>
+                    <div id="login-error-msg" style="display:none; color:var(--color-danger); font-size:0.75rem; font-weight:600; margin-bottom:12px; text-align:center;">
+                        Invalid credentials. Use client@donora.com / password123
+                    </div>
+                    <button type="submit" class="btn-gold-submit">Log In to Portal</button>
+                </form>
+            </div>
+        `;
+    } else {
+        // Render Client Portal Dashboard
+        const userBookings = bookings;
+        const totalSaved = favorites.length;
+
+        container.innerHTML = `
+            <div style="display:flex; flex-direction:column; gap:20px;">
+                <!-- Welcome Banner -->
+                <div class="booking-form-card" style="border-left: 4px solid var(--color-primary); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                    <div>
+                        <h3 style="font-family:var(--font-heading); font-size:1.15rem; font-weight:800; color:var(--color-primary);">Welcome Back, Client Portal</h3>
+                        <p style="font-size:0.78rem; color:var(--color-text-sub); margin-top:2px;">Logged in securely as <strong>${loggedInUser}</strong></p>
+                    </div>
+                    <button onclick="handleLogout()" class="btn-card-secondary" style="border-radius:50px; font-size:0.7rem; padding:6px 14px;">Sign Out</button>
+                </div>
+
+                <!-- Main Grid Layout -->
+                <div style="display:grid; grid-template-columns: 1fr; gap:20px; align-items:start;" id="portal-dashboard-grid">
+                    <!-- Left: Comparative reports -->
+                    <div class="booking-form-card">
+                        <h4 style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px; color:var(--color-primary);">My Document Library</h4>
+                        
+                        <div style="display:flex; flex-direction:column; gap:12px;">
+                            <a href="#" onclick="alert('Downloading Comparative Market Analysis (CMA) - Rosharon Estate.pdf (Simulated)')" class="dropdown-item" style="border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:12px; display:flex; justify-content:space-between; align-items:center;">
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
+                                    <div>
+                                        <div style="font-weight:700; font-size:0.8rem; color:var(--color-text-main);">Comparative Market Assessment (CMA).pdf</div>
+                                        <span style="font-size:0.68rem; color:var(--color-text-sub);">Prepared by Kameron Whitfield • August 2026</span>
+                                    </div>
+                                </div>
+                                <span style="font-size:0.65rem; color:var(--color-primary); font-weight:800; text-transform:uppercase;">Download</span>
+                            </a>
+
+                            <a href="#" onclick="alert('Downloading Houston Q3 Real Estate Indices.pdf (Simulated)')" class="dropdown-item" style="border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:12px; display:flex; justify-content:space-between; align-items:center;">
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
+                                    <div>
+                                        <div style="font-weight:700; font-size:0.8rem; color:var(--color-text-main);">Houston Housing Market Index - Q3.pdf</div>
+                                        <span style="font-size:0.68rem; color:var(--color-text-sub);">Regional MLS Analysis Summary</span>
+                                    </div>
+                                </div>
+                                <span style="font-size:0.65rem; color:var(--color-primary); font-weight:800; text-transform:uppercase;">Download</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Quick Summaries -->
+                    <div style="display:flex; flex-direction:column; gap:20px;">
+                        <div class="booking-form-card">
+                            <h4 style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px; color:var(--color-primary);">My Activity Profile</h4>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                                <div style="background:var(--bg-main); border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:12px; text-align:center; cursor:pointer;" onclick="navigateTo('favorites')">
+                                    <span style="font-size:1.6rem; font-weight:800; color:var(--color-primary); font-family:var(--font-heading);">${totalSaved}</span>
+                                    <div style="font-size:0.68rem; color:var(--color-text-sub); text-transform:uppercase; margin-top:2px; font-weight:700; letter-spacing:0.5px;">Saved Listings</div>
+                                </div>
+                                <div style="background:var(--bg-main); border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:12px; text-align:center; cursor:pointer;" onclick="navigateTo('book')">
+                                    <span style="font-size:1.6rem; font-weight:800; color:var(--color-primary); font-family:var(--font-heading);">${userBookings.length}</span>
+                                    <div style="font-size:0.68rem; color:var(--color-text-sub); text-transform:uppercase; margin-top:2px; font-weight:700; letter-spacing:0.5px;">Scheduled Tours</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${userBookings.length > 0 ? `
+                            <div class="booking-form-card">
+                                <h4 style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px; color:var(--color-primary);">Recent Bookings</h4>
+                                <div style="display:flex; flex-direction:column; gap:8px;">
+                                    ${userBookings.slice(0, 3).map(apt => `
+                                        <div style="background:var(--bg-main); border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:8px 12px; display:flex; justify-content:space-between; align-items:center;">
+                                            <div>
+                                                <div style="font-size:0.78rem; font-weight:700; color:var(--color-text-main);">${apt.service}</div>
+                                                <span style="font-size:0.65rem; color:var(--color-text-sub);">${apt.date ? `${apt.date} at ${apt.time}` : 'Valuation Report'}</span>
+                                            </div>
+                                            <span style="font-size:0.6rem; font-weight:800; color:var(--color-primary); text-transform:uppercase;">${apt.status.split(' / ')[0]}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Apply grid responsive adjust dynamically if viewport allows
+        adjustPortalDashboardLayout();
+    }
+}
+
+function adjustPortalDashboardLayout() {
+    const grid = document.getElementById('portal-dashboard-grid');
+    if (grid && window.innerWidth >= 768) {
+        grid.style.gridTemplateColumns = '1.1fr 0.9fr';
+    } else if (grid) {
+        grid.style.gridTemplateColumns = '1fr';
+    }
+}
+
+// Listen to resize to adjust portal layout grid
+window.addEventListener('resize', adjustPortalDashboardLayout);
+
+function handleLoginSubmit(event) {
+    event.preventDefault();
+    const email = document.getElementById('login-email').value.trim().toLowerCase();
+    const pass = document.getElementById('login-password').value;
+    const errorEl = document.getElementById('login-error-msg');
+
+    // Simple auth validation logic (accepts standard demo login credentials)
+    if (email === 'client@donora.com' && pass === 'password123') {
+        isLoggedIn = true;
+        loggedInUser = email;
+        sessionStorage.setItem('client_logged_in', 'true');
+        sessionStorage.setItem('client_user', email);
+        if (errorEl) errorEl.style.display = 'none';
+        renderPortalView();
+    } else {
+        if (errorEl) errorEl.style.display = 'block';
+    }
+}
+
+function handleLogout() {
+    isLoggedIn = false;
+    sessionStorage.removeItem('client_logged_in');
+    sessionStorage.removeItem('client_user');
+    renderPortalView();
+}
+
+// 13. LEGAL MODALS (TERMS & PRIVACY CONTENT)
+function openLegalModal(docType) {
+    const modal = document.getElementById('legal-modal');
+    const body = document.getElementById('legal-modal-body');
+    if (!modal || !body) return;
+
+    const termsContent = `
+        <h2 style="font-family:var(--font-heading); font-size:1.35rem; font-weight:800; color:var(--color-primary); margin-bottom:12px;">Terms of Service</h2>
+        <p style="font-size:0.68rem; color:var(--color-text-sub); text-transform:uppercase; font-weight:700; margin-bottom:14px; letter-spacing:1px;">Last Updated: August 2026</p>
+        
+        <div style="font-size:0.8rem; line-height:1.6; color:var(--color-text-sub); display:flex; flex-direction:column; gap:12px;">
+            <p>Welcome to Kameron Whitfield's real estate portal. By accessing this platform, you agree to comply with and be bound by the following Terms of Service. If you do not agree to these terms, you should not access or use this site.</p>
+            
+            <h4 style="font-family:var(--font-heading); font-size:0.9rem; font-weight:700; color:var(--color-text-main); margin-top:8px;">1. Real Estate Information Accuracy</h4>
+            <p>All property listings and financial calculation projections (including principal, taxes, and interest estimations in our Financial Estimate Model) displayed on this platform are for informational purposes only. Information is sourced from the Houston Association of Realtors (HAR) MLS but is not guaranteed. Buyers are advised to independently verify all property statistics, dimensions, and valuations with a licensed professional.</p>
+            
+            <h4 style="font-family:var(--font-heading); font-size:0.9rem; font-weight:700; color:var(--color-text-main); margin-top:8px;">2. Fair Housing & Equal Opportunity</h4>
+            <p>Kameron Whitfield and All City Real Estate are committed to complying with the Fair Housing Act. We support equal housing opportunities and do not discriminate based on race, color, religion, sex, handicap, familial status, or national origin.</p>
+            
+            <h4 style="font-family:var(--font-heading); font-size:0.9rem; font-weight:700; color:var(--color-text-main); margin-top:8px;">3. Platform Use Restrictions</h4>
+            <p>You may use this portal solely for your personal, non-commercial purposes to search for properties and connect with Kameron Whitfield. Scraping listings or duplicating design components is strictly prohibited.</p>
+        </div>
+    `;
+
+    const privacyContent = `
+        <h2 style="font-family:var(--font-heading); font-size:1.35rem; font-weight:800; color:var(--color-primary); margin-bottom:12px;">Privacy Policy</h2>
+        <p style="font-size:0.68rem; color:var(--color-text-sub); text-transform:uppercase; font-weight:700; margin-bottom:14px; letter-spacing:1px;">Last Updated: August 2026</p>
+        
+        <div style="font-size:0.8rem; line-height:1.6; color:var(--color-text-sub); display:flex; flex-direction:column; gap:12px;">
+            <p>Your privacy is of utmost importance to us. This Privacy Policy details how we collect, store, and utilize your personal information on Kameron Whitfield's real estate portal.</p>
+            
+            <h4 style="font-family:var(--font-heading); font-size:0.9rem; font-weight:700; color:var(--color-text-main); margin-top:8px;">1. Information Collection</h4>
+            <p>We collect personal identifiers (such as names, phone numbers, and email addresses) that you voluntarily submit through our Private Client Request Portal, lead generation popups, and the Off-Market Gazette subscription forms.</p>
+            
+            <h4 style="font-family:var(--font-heading); font-size:0.9rem; font-weight:700; color:var(--color-text-main); margin-top:8px;">2. Use of Captured Data</h4>
+            <p>Captured information is used exclusively to facilitate private tours, organize comparative market analysis briefs, deliver requested newsletter reports, and contact you directly regarding residential advisory services. We do not sell or lease your personal lead data to third parties.</p>
+            
+            <h4 style="font-family:var(--font-heading); font-size:0.9rem; font-weight:700; color:var(--color-text-main); margin-top:8px;">3. Lead Data Protection & Rights</h4>
+            <p>Lead entries are processed securely. You may contact Kameron Whitfield's office at any time to request the removal or correction of your email address and contact record from our advisory databases.</p>
+        </div>
+    `;
+
+    body.innerHTML = docType === 'terms' ? termsContent : privacyContent;
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeLegalModal() {
+    const modal = document.getElementById('legal-modal');
+    if (modal) {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+}
+
 // Global exposure of navigation helpers for inline HTML button triggers
 window.navigateTo = navigateTo;
 window.toggleFavorite = toggleFavorite;
@@ -1045,3 +1261,7 @@ window.toggleHeaderConnect = toggleHeaderConnect;
 window.copyBusinessCard = copyBusinessCard;
 window.openLeadPopup = openLeadPopup;
 window.closeLeadPopup = closeLeadPopup;
+window.handleLoginSubmit = handleLoginSubmit;
+window.handleLogout = handleLogout;
+window.openLegalModal = openLegalModal;
+window.closeLegalModal = closeLegalModal;

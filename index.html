@@ -61,12 +61,16 @@
                     <button class="desktop-nav-item" id="desk-btn-listings" onclick="navigateTo('listings')">The Collection</button>
                     <button class="desktop-nav-item" id="desk-btn-calculator" onclick="navigateTo('calculator')">Calculations</button>
                     <button class="desktop-nav-item" id="desk-btn-book" onclick="navigateTo('book')">Private Viewing</button>
+                    <button class="desktop-nav-item" id="desk-btn-login" onclick="navigateTo('login')">Client Portal</button>
                     <button class="desktop-nav-item" id="desk-btn-favorites" onclick="navigateTo('favorites')">
                         Saved
                         <span class="desktop-fav-badge" id="desk-fav-badge" style="display: none;">0</span>
                     </button>
                 </nav>
                 <div class="header-actions">
+                    <button class="header-icon-btn" aria-label="Client Portal" onclick="navigateTo('login')" style="margin-right: 6px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </button>
                     <button class="header-icon-btn" id="header-connect-toggle" aria-label="Connect Options" onclick="toggleHeaderConnect()">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     </button>
@@ -473,6 +477,30 @@
                     </div>
                 </div>
             </section>
+
+            <!-- 6. CLIENT PORTAL / LOGIN VIEW -->
+            <section id="view-login" class="view">
+                <div class="calc-header">
+                    <h2>Client Advisory Portal</h2>
+                    <p>Access your private comparative reports, saved listings, and scheduled showing appointments</p>
+                </div>
+                <div class="view-padding" id="portal-view-content">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </section>
+
+            <!-- Elegant Editorial Footer inside scroll content -->
+            <footer class="app-footer">
+                <div class="footer-content">
+                    <div class="footer-links">
+                        <button onclick="openLegalModal('terms')" class="footer-btn-link">Terms of Service</button>
+                        <span class="footer-divider">•</span>
+                        <button onclick="openLegalModal('privacy')" class="footer-btn-link">Privacy Policy</button>
+                    </div>
+                    <p class="footer-copy">&copy; 2026 Kameron Whitfield. All rights reserved.</p>
+                    <p class="footer-credit">Designed by DonOra Global</p>
+                </div>
+            </footer>
         </main>
 
         <!-- Bottom Navigation Bar (Mobile / Tablet Layouts) -->
@@ -514,6 +542,20 @@
             
             <div class="sheet-body" id="sheet-body-content">
                 <!-- Dynamically populated detail markup -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Legal Document Overlay Modal -->
+    <div id="legal-modal" class="bottom-sheet" aria-hidden="true">
+        <div class="bottom-sheet-backdrop" onclick="closeLegalModal()"></div>
+        <div class="bottom-sheet-content" style="max-height: 80%;">
+            <div class="sheet-handle" onclick="closeLegalModal()"></div>
+            <button class="sheet-close-btn" onclick="closeLegalModal()" aria-label="Close document">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="sheet-body" id="legal-modal-body">
+                <!-- Dynamically populated document content -->
             </div>
         </div>
     </div>

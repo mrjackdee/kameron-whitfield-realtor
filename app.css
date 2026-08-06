@@ -37,6 +37,25 @@ body {
     font-family: var(--font-body);
     min-height: 100vh;
     overflow-x: hidden;
+    position: relative;
+}
+
+/* Strong Diagonal DRAFT Watermark Overlay */
+body::after {
+    content: "DRAFT";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-40deg);
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 8.5rem;
+    letter-spacing: 12px;
+    color: rgba(138, 28, 46, 0.07); /* Clear semi-transparent Crimson watermark */
+    pointer-events: none;
+    z-index: 99999;
+    user-select: none;
+    white-space: nowrap;
 }
 
 /* Splash Screen Overlay Styling */
@@ -328,6 +347,8 @@ body {
 
 .header-actions {
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .header-icon-btn {
@@ -1706,6 +1727,67 @@ body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Elegant Editorial Scroll Footer Styles */
+.app-footer {
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    padding: 30px 20px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-btn-link {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-btn-link:hover {
+    color: var(--color-primary-light);
+    text-decoration: underline;
+}
+
+.footer-divider {
+    color: var(--border-color);
+    font-size: 0.8rem;
+}
+
+.footer-copy {
+    font-size: 0.72rem;
+    color: var(--color-text-sub);
+    line-height: 1.4;
+}
+
+.footer-credit {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 /* Bottom Sheet Modal Component */
