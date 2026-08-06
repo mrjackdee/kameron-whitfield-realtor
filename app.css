@@ -14,8 +14,8 @@
     --color-text-dark: #8C807A;
     --color-success: #3E6B5C;    /* Forest Gold */
     --color-danger: #C24153;
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'Lora', serif;
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
     --font-cursive: 'Satisfy', cursive;
     --shadow-premium: 0 10px 30px rgba(31, 25, 22, 0.04), 0 4px 12px rgba(138, 28, 46, 0.03);
     --border-radius-lg: 12px;
@@ -94,6 +94,10 @@ body {
     display: none;
 }
 
+.header-actions {
+    position: relative;
+}
+
 .header-icon-btn {
     color: var(--color-primary);
     background: rgba(138, 28, 46, 0.05);
@@ -106,10 +110,64 @@ body {
     justify-content: center;
     text-decoration: none;
     transition: all var(--transition-speed);
+    cursor: pointer;
+    outline: none;
 }
 
 .header-icon-btn:active {
     background: rgba(138, 28, 46, 0.15);
+}
+
+/* Connect Dropdown Menu */
+.header-dropdown {
+    position: absolute;
+    top: 48px;
+    right: 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 10px 25px -5px rgba(31, 25, 22, 0.15);
+    padding: 8px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 100;
+    animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-8px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    color: var(--color-text-main);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    font-family: var(--font-body);
+}
+
+.dropdown-item:hover {
+    background-color: rgba(138, 28, 46, 0.05);
+    color: var(--color-primary);
+}
+
+.dropdown-item svg {
+    color: var(--color-primary);
+    flex-shrink: 0;
 }
 
 /* Main Content Area */
@@ -152,41 +210,47 @@ body {
     padding: 20px;
 }
 
-/* Home Section Layouts */
-.hero-card {
+/* Home Section Layouts (Hero Section) */
+.hero-section {
+    background: linear-gradient(135deg, #F4F0E6 0%, #E6DFD3 100%);
+    border-bottom: 1px solid var(--border-color);
+    padding: 30px 20px;
     position: relative;
-    height: 280px;
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
 }
 
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+.hero-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, rgba(252, 250, 246, 0.1) 0%, rgba(252, 250, 246, 0.95) 100%);
-    z-index: 2;
+}
+
+.hero-avatar-container {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 3px solid var(--color-primary);
+    background-color: #FFFFFF;
+    box-shadow: var(--shadow-premium);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .hero-avatar {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center 25%;
-    z-index: 1;
+    object-fit: contain; /* Displays the full photo appropriately! */
 }
 
 .hero-info {
-    position: relative;
-    z-index: 3;
-    padding: 24px;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .realtor-tag {
@@ -204,7 +268,7 @@ body {
 
 .realtor-name {
     font-family: var(--font-heading);
-    font-size: 2.1rem;
+    font-size: 1.85rem;
     font-weight: 800;
     margin-top: 8px;
     color: var(--color-text-main);
@@ -215,18 +279,16 @@ body {
     font-size: 0.78rem;
     color: var(--color-text-sub);
     letter-spacing: 1.5px;
-    margin-top: 3px;
-    font-weight: 500;
+    margin-top: 2px;
+    font-weight: 600;
 }
 
 .signature {
     font-family: var(--font-cursive);
-    font-size: 1.65rem;
+    font-size: 1.5rem;
     color: var(--color-primary);
-    position: absolute;
-    right: 24px;
-    bottom: 16px;
     transform: rotate(-6deg);
+    margin-top: 8px;
     opacity: 0.85;
 }
 
@@ -296,6 +358,7 @@ body {
     white-space: nowrap;
     transition: all 0.2s;
     cursor: pointer;
+    font-family: var(--font-heading);
 }
 
 .contact-pill:active {
@@ -1539,12 +1602,31 @@ body {
     }
 
     /* Home View - Grid adjustments */
-    .hero-card {
-        height: 380px;
+    .hero-section {
+        padding: 30px 40px;
     }
-    
-    .hero-avatar {
-        object-position: center 30%;
+
+    .hero-content-wrapper {
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .hero-avatar-container {
+        width: 140px;
+        height: 140px;
+    }
+
+    .hero-info {
+        align-items: flex-start;
+    }
+
+    .signature {
+        position: absolute;
+        right: 40px;
+        bottom: 30px;
+        margin-top: 0;
     }
 
     /* Listings Portal - 2 Columns on Tablet */

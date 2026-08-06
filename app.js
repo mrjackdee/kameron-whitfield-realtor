@@ -938,6 +938,35 @@ function initGazetteForm() {
     });
 }
 
+// 10. DYNAMIC HEADER CONNECT DRIVER
+function toggleHeaderConnect() {
+    const dropdown = document.getElementById('header-connect-dropdown');
+    if (!dropdown) return;
+    const isHidden = dropdown.style.display === 'none';
+    dropdown.style.display = isHidden ? 'block' : 'none';
+}
+
+function copyBusinessCard() {
+    const cardData = `Kameron Whitfield\nAll City Real Estate\nPhone: 281-995-6551\nEmail: kwhitfield.realtor@gmail.com`;
+    navigator.clipboard.writeText(cardData).then(() => {
+        alert("Contact details copied to clipboard!");
+        toggleHeaderConnect();
+    }).catch(err => {
+        console.error("Failed to copy card details", err);
+    });
+}
+
+// Click outside logic to close dropdown
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('header-connect-dropdown');
+    const toggleBtn = document.getElementById('header-connect-toggle');
+    if (dropdown && toggleBtn && dropdown.style.display === 'block') {
+        if (!dropdown.contains(e.target) && !toggleBtn.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    }
+});
+
 // Global exposure of navigation helpers for inline HTML button triggers
 window.navigateTo = navigateTo;
 window.toggleFavorite = toggleFavorite;
@@ -948,3 +977,5 @@ window.requestValuation = requestValuation;
 window.resetBookingForm = resetBookingForm;
 window.calculateMortgageForPrice = calculateMortgageForPrice;
 window.updateSheetFavoriteBtn = updateSheetFavoriteBtn;
+window.toggleHeaderConnect = toggleHeaderConnect;
+window.copyBusinessCard = copyBusinessCard;
