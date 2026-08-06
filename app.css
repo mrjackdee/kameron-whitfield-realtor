@@ -40,23 +40,29 @@ body {
     position: relative;
 }
 
-/* Strong Diagonal DRAFT Watermark Overlay (Prominent but blend-safe) */
-body::after {
-    content: "DRAFT";
+/* Prominent Prototype Notice Banner */
+.prototype-banner {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-45deg);
-    font-family: var(--font-heading);
-    font-weight: 900;
-    font-size: 9.5rem;
-    letter-spacing: 15px;
-    color: rgba(138, 28, 46, 0.13); /* Prominent semi-transparent Crimson watermark */
-    mix-blend-mode: multiply; /* Blends cleanly with background and leaves text 100% visible */
-    pointer-events: none;
-    z-index: 99999;
-    user-select: none;
-    white-space: nowrap;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100000;
+    background-color: #1F1916;
+    color: #FCFAF6;
+    text-align: center;
+    padding: 8px 16px;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+}
+
+.prototype-banner span {
+    font-weight: 800;
+    color: #F5C542;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 }
 
 /* Splash Screen Overlay Styling */
@@ -301,6 +307,7 @@ body::after {
     position: relative;
     display: flex;
     flex-direction: column;
+    margin-top: 34px; /* Offset for fixed prototype banner */
 }
 
 /* Header Component */
