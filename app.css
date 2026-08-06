@@ -265,11 +265,13 @@ body::after {
 }
 
 .btn-popup-submit {
+    align-self: center;
+    width: fit-content;
     background-color: var(--color-primary);
     color: #FFFFFF;
     border: none;
     border-radius: 50px; /* Rounded CTA */
-    padding: 13px;
+    padding: 12px 36px;
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: 0.88rem;
@@ -468,6 +470,7 @@ body::after {
     background-image: linear-gradient(180deg, rgba(31, 25, 22, 0.45) 0%, rgba(31, 25, 22, 0.7) 100%), url('luxury_houston_house.jpg');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     border-bottom: 1px solid var(--border-color);
     padding: 30px 20px;
     position: relative;
@@ -522,8 +525,8 @@ body::after {
 }
 
 .hero-avatar-container {
-    width: 130px;
-    height: 130px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     border: 3px solid var(--color-primary);
     background-color: #FFFFFF;
@@ -635,7 +638,8 @@ body::after {
 }
 
 .contact-pill {
-    flex: 1;
+    flex: 0 0 auto;
+    width: fit-content;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -899,6 +903,8 @@ body::after {
 }
 
 .btn-gazette-submit {
+    flex-shrink: 0;
+    width: fit-content;
     background-color: var(--color-primary);
     color: #FFFFFF;
     border: none;
@@ -1189,19 +1195,20 @@ body::after {
     color: var(--color-primary);
 }
 
+/* Listing CTA buttons sized to text size */
 .listing-cta-row {
     display: flex;
     gap: 8px;
     margin-top: 14px;
+    justify-content: flex-start;
 }
 
 .btn-card-primary {
-    flex: 1;
     background-color: var(--color-primary);
     color: #FFFFFF;
     border: none;
     border-radius: 50px; /* Fully rounded buttons */
-    padding: 10px 18px;
+    padding: 10px 22px;
     font-family: var(--font-heading);
     font-size: 0.78rem;
     font-weight: 700;
@@ -1487,18 +1494,18 @@ body::after {
 
 .btn-gold-submit {
     display: block;
-    width: 100%;
+    width: fit-content;
+    margin: 16px auto 0 auto;
     background-color: var(--color-primary);
     color: #FFFFFF;
     border: none;
-    padding: 12px;
+    padding: 12px 36px;
     border-radius: 50px; /* Rounded CTA */
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: 0.88rem;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    margin-top: 8px;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.8px;
@@ -1517,18 +1524,18 @@ body::after {
 
 .btn-secondary-submit {
     display: block;
-    width: 100%;
+    width: fit-content;
+    margin: 16px auto 0 auto;
     background-color: rgba(138, 28, 46, 0.02);
     border: 1px solid var(--border-color);
     color: var(--color-text-main);
-    padding: 12px;
+    padding: 12px 36px;
     border-radius: 50px; /* Rounded CTA */
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: 0.88rem;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    margin-top: 8px;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.8px;
@@ -2055,8 +2062,8 @@ body::after {
     }
 
     .hero-avatar-container {
-        width: 140px;
-        height: 140px;
+        width: 180px;
+        height: 180px;
     }
 
     .hero-info {
@@ -2170,12 +2177,14 @@ body::after {
         grid-column: 2;
         grid-row: 1;
         flex-direction: column;
+        align-items: flex-start;
         gap: 10px;
     }
     
     #view-home .quick-contact-bar .contact-pill {
-        width: 100%;
-        padding: 14px;
+        width: fit-content;
+        padding: 14px 24px;
+        align-self: flex-start;
     }
 
     #view-home .info-section:nth-of-type(2) { /* Accreditations */
