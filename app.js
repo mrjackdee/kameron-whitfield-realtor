@@ -227,10 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function navigateTo(viewId) {
     const views = document.querySelectorAll('.view');
     const navItems = document.querySelectorAll('.nav-item');
+    const deskNavItems = document.querySelectorAll('.desktop-nav-item');
     
     // Deactivate all views and nav actions
     views.forEach(v => v.classList.remove('active'));
     navItems.forEach(n => n.classList.remove('active'));
+    deskNavItems.forEach(d => d.classList.remove('active'));
     
     // Activate target view
     const targetView = document.getElementById(`view-${viewId}`);
@@ -240,10 +242,16 @@ function navigateTo(viewId) {
         document.querySelector('.app-content').scrollTop = 0;
     }
     
-    // Activate nav button
+    // Activate mobile nav button
     const targetNav = document.getElementById(`nav-btn-${viewId}`);
     if (targetNav) {
         targetNav.classList.add('active');
+    }
+
+    // Activate desktop nav button
+    const targetDeskNav = document.getElementById(`desk-btn-${viewId}`);
+    if (targetDeskNav) {
+        targetDeskNav.classList.add('active');
     }
 
     // Specially handle views on navigation
@@ -470,13 +478,20 @@ function toggleFavorite(event, listingId) {
 
 function updateFavoritesBadge() {
     const badge = document.getElementById('fav-count-badge');
-    if (!badge) return;
+    const deskBadge = document.getElementById('desk-fav-badge');
     
     if (favorites.length > 0) {
-        badge.style.display = 'flex';
-        badge.textContent = favorites.length;
+        if (badge) {
+            badge.style.display = 'flex';
+            badge.textContent = favorites.length;
+        }
+        if (deskBadge) {
+            deskBadge.style.display = 'inline-flex';
+            deskBadge.textContent = favorites.length;
+        }
     } else {
-        badge.style.display = 'none';
+        if (badge) badge.style.display = 'none';
+        if (deskBadge) deskBadge.style.display = 'none';
     }
 }
 

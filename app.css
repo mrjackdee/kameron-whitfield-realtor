@@ -35,9 +35,6 @@ body {
     background-color: #03070C;
     color: var(--color-text-main);
     font-family: var(--font-body);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -45,24 +42,15 @@ body {
 /* App Layout & Device Wrapping */
 .app-shell {
     width: 100%;
-    max-width: 430px; /* iPhone 14 / Pro Max Standard width */
-    height: 100vh;
+    min-height: 100vh;
     background-color: var(--bg-main);
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
 }
 
-@media (min-width: 440px) {
-    .app-shell {
-        height: 880px; /* Height constraint on desktop for preview */
-        border-radius: 36px;
-        border: 8px solid #1E293B;
-    }
+.desktop-nav {
+    display: none;
 }
 
 /* Header Component */
@@ -1321,3 +1309,218 @@ body {
     background-color: var(--color-primary);
     color: #000;
 }
+
+/* ==========================================================================
+   Responsive Refactoring (Tablet & Desktop Breakpoints)
+   ========================================================================== */
+
+@media (min-width: 768px) {
+    /* Hide bottom mobile navigation */
+    .app-nav {
+        display: none !important;
+    }
+    
+    /* Reset main content container bottom offset */
+    .app-content {
+        padding-bottom: 24px;
+    }
+
+    /* Display header desktop navigation */
+    .desktop-nav {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .desktop-nav-item {
+        background: none;
+        border: none;
+        color: var(--color-text-sub);
+        font-family: var(--font-heading);
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        cursor: pointer;
+        padding: 8px 4px;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .desktop-nav-item:hover {
+        color: var(--color-primary-light);
+    }
+
+    .desktop-nav-item.active {
+        color: var(--color-primary);
+    }
+
+    .desktop-nav-item.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--color-primary);
+        border-radius: 2px;
+    }
+
+    .desktop-fav-badge {
+        background-color: var(--color-danger);
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 800;
+        padding: 1px 6px;
+        border-radius: 10px;
+        margin-left: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Fluid App Shell layout */
+    .app-shell {
+        min-height: 100vh;
+    }
+
+    /* Home View - Grid adjustments */
+    .hero-card {
+        height: 380px;
+    }
+    
+    .hero-avatar {
+        object-position: center 30%;
+    }
+
+    /* Listings Portal - 2 Columns on Tablet */
+    .listings-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .listings-sticky-bar {
+        top: 67px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding: 14px 18px;
+    }
+
+    .listings-sticky-bar .search-box {
+        margin-bottom: 0;
+        flex: 1;
+        max-width: 320px;
+    }
+
+    /* Mortgage Calculator - Split Grid Pane */
+    #view-calculator .view-padding {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .calculator-card {
+        margin-bottom: 0;
+        height: 100%;
+    }
+
+    /* Booking consultation form layout */
+    .booking-form-card {
+        padding: 24px;
+    }
+
+    /* Bottom Sheet Details Width styling */
+    .bottom-sheet-content {
+        max-width: 600px;
+        left: 50%;
+        transform: translate(-50%, 100%);
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+    }
+
+    .bottom-sheet.open .bottom-sheet-content {
+        transform: translate(-50%, 0);
+    }
+}
+
+@media (min-width: 1024px) {
+    /* Enforce desktop max container width */
+    .app-shell {
+        max-width: 1140px;
+        margin: 0 auto;
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Header styling adjustments */
+    .app-header {
+        padding: 18px 24px;
+    }
+    
+    .desktop-nav {
+        gap: 24px;
+    }
+
+    .view-padding {
+        padding: 24px;
+    }
+
+    /* Home View - Split Columns Dashboard */
+    #view-home .view-padding {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 28px;
+        align-items: start;
+    }
+
+    /* Left Column Items layout */
+    #view-home .stats-grid {
+        grid-column: 1;
+    }
+    
+    #view-home .info-section:nth-of-type(1) { /* Bio */
+        grid-column: 1;
+    }
+
+    #view-home .info-section:nth-of-type(3) { /* Featured Listing */
+        grid-column: 1;
+    }
+
+    #view-home .social-wrapper {
+        grid-column: 1;
+    }
+
+    /* Right Column Items layout */
+    #view-home .quick-contact-bar {
+        grid-column: 2;
+        grid-row: 1;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #view-home .quick-contact-bar .contact-pill {
+        width: 100%;
+        padding: 14px;
+    }
+
+    #view-home .info-section:nth-of-type(2) { /* Credentials & Designations */
+        grid-column: 2;
+        grid-row: 2 / span 3;
+    }
+
+    /* Listings Portal - 3 Columns on Desktop */
+    .listings-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+
+    .listings-sticky-bar {
+        padding: 16px 24px;
+    }
+}
+
