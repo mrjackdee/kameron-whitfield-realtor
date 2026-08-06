@@ -442,9 +442,11 @@ body {
     padding: 20px;
 }
 
-/* Home Section Layouts (Hero Section) */
+/* Home Section Layouts (Hero Section with Property Backlay) */
 .hero-section {
-    background: linear-gradient(135deg, #F4F0E6 0%, #E6DFD3 100%);
+    background-image: linear-gradient(180deg, rgba(31, 25, 22, 0.45) 0%, rgba(31, 25, 22, 0.7) 100%), url('luxury_houston_house.jpg');
+    background-size: cover;
+    background-position: center;
     border-bottom: 1px solid var(--border-color);
     padding: 30px 20px;
     position: relative;
@@ -457,6 +459,45 @@ body {
     text-align: center;
     gap: 16px;
     width: 100%;
+    background-color: rgba(252, 250, 246, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 24px 16px;
+    box-shadow: 0 10px 35px rgba(31, 25, 22, 0.15);
+}
+
+.hero-email-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 700;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 10px rgba(138, 28, 46, 0.15);
+}
+
+.hero-email-cta:hover {
+    background-color: var(--color-primary-light);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(138, 28, 46, 0.25);
+}
+
+.hero-email-cta:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+.hero-email-cta svg {
+    stroke: currentColor;
+    stroke-width: 2;
 }
 
 .hero-avatar-container {
@@ -1920,14 +1961,15 @@ body {
 
     /* Home View - Grid adjustments */
     .hero-section {
-        padding: 30px 40px;
+        padding: 50px 40px;
     }
 
     .hero-content-wrapper {
         flex-direction: row;
         text-align: left;
         align-items: center;
-        gap: 24px;
+        gap: 32px;
+        padding: 32px 40px;
     }
 
     .hero-avatar-container {
