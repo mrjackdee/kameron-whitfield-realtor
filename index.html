@@ -32,18 +32,53 @@
         <div class="lead-popup-backdrop" onclick="closeLeadPopup()"></div>
         <div class="lead-popup-content">
             <button class="lead-popup-close" onclick="closeLeadPopup()" aria-label="Close popup">&times;</button>
-            <div class="lead-popup-header">
-                <h2>Partner with Kameron</h2>
-                <p>Houston's Premier Residential Advisory</p>
+            
+            <div id="popup-lead-quiz-container">
+                <!-- Step 1: Goal -->
+                <div class="quiz-step active" id="quiz-step-1">
+                    <div class="lead-popup-header">
+                        <h2>Partner with Kameron</h2>
+                        <p>Step 1 of 3: Real Estate Objective</p>
+                    </div>
+                    <div class="quiz-options">
+                        <button type="button" class="btn-quiz-option" onclick="selectQuizGoal('Buy')">Buy a Houston Home</button>
+                        <button type="button" class="btn-quiz-option" onclick="selectQuizGoal('Sell')">Sell my Property</button>
+                        <button type="button" class="btn-quiz-option" onclick="selectQuizGoal('Invest')">Portfolio Investment</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Budget -->
+                <div class="quiz-step" id="quiz-step-2" style="display: none;">
+                    <div class="lead-popup-header">
+                        <h2>Target Investment</h2>
+                        <p>Step 2 of 3: Budget Range</p>
+                    </div>
+                    <div class="quiz-options">
+                        <button type="button" class="btn-quiz-option" onclick="selectQuizBudget('Sub-1M')">Under $1,000,000</button>
+                        <button type="button" class="btn-quiz-option" onclick="selectQuizBudget('1M-2.5M')">$1,000,000 – $2,500,000</button>
+                        <button type="button" class="btn-quiz-option" onclick="selectQuizBudget('2.5M+')">$2,500,000+</button>
+                    </div>
+                    <button type="button" class="btn-quiz-back" onclick="prevQuizStep(1)">← Back</button>
+                </div>
+
+                <!-- Step 3: Contact details -->
+                <div class="quiz-step" id="quiz-step-3" style="display: none;">
+                    <div class="lead-popup-header">
+                        <h2>Personal Concierge</h2>
+                        <p>Step 3 of 3: Private Contact Details</p>
+                    </div>
+                    <form id="popup-lead-form" class="popup-lead-form">
+                        <input type="text" id="popup-name" placeholder="Your Name" required>
+                        <input type="tel" id="popup-phone" placeholder="Phone Number" required>
+                        <input type="email" id="popup-email" placeholder="Email Address" required>
+                        <button type="submit" class="btn-popup-submit" style="width: 100%; border-radius: 50px;">Request Consultation</button>
+                    </form>
+                    <button type="button" class="btn-quiz-back" onclick="prevQuizStep(2)">← Back</button>
+                </div>
             </div>
-            <p class="lead-popup-promo">Schedule a private showing or request a complimentary market evaluation. Enter your details below to get connected immediately.</p>
-            <form id="popup-lead-form" class="popup-lead-form">
-                <input type="text" id="popup-name" placeholder="Your Name" required>
-                <input type="tel" id="popup-phone" placeholder="Phone Number" required>
-                <button type="submit" class="btn-popup-submit">Request Consultation</button>
-            </form>
+
             <div id="popup-lead-success" style="display: none; color: var(--color-success); font-weight: 600; text-align: center; margin-top: 12px; font-size: 0.88rem;">
-                ✓ Request received. We will connect shortly.
+                ✓ Request received. Kameron will connect shortly.
             </div>
         </div>
     </div>
@@ -68,6 +103,10 @@
                     </button>
                 </nav>
                 <div class="header-actions">
+                    <button class="header-icon-btn" id="theme-toggle-btn" aria-label="Toggle Dark/Light Mode" style="margin-right: 6px;">
+                        <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
                     <button class="header-icon-btn" aria-label="Client Portal" onclick="navigateTo('login')" style="margin-right: 6px;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </button>
@@ -322,11 +361,56 @@
                         <button class="filter-btn" data-filter="rent">For Lease</button>
                         <button class="filter-btn" data-filter="sold">Acquired Properties</button>
                     </div>
+                    <!-- Segmented Layout View Toggler -->
+                    <div class="view-switch-tabs" style="display: flex; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 50px; padding: 4px; gap: 4px; margin-left: auto;">
+                        <button class="view-switch-btn active" id="btn-list-view" onclick="switchListingsLayout('list')" style="background: var(--color-primary); border: none; border-radius: 50px; padding: 6px 14px; font-family: var(--font-heading); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; cursor: pointer; color: #FFFFFF; transition: all 0.2s;">List</button>
+                        <button class="view-switch-btn" id="btn-map-view" onclick="switchListingsLayout('map')" style="background: none; border: none; border-radius: 50px; padding: 6px 14px; font-family: var(--font-heading); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; cursor: pointer; color: var(--color-text-sub); transition: all 0.2s;">Map</button>
+                    </div>
                 </div>
                 
                 <div class="view-padding">
                     <div class="listings-grid" id="listings-container">
                         <!-- Populated dynamically via JS -->
+                    </div>
+                    <!-- Map Layout Overlay Placeholder -->
+                    <div id="listings-map-container" style="display: none; margin-top: 15px;">
+                        <div class="map-view-wrapper" style="position: relative; width: 100%; border-radius: var(--border-radius-md); overflow: hidden; border: 1px solid var(--border-color); box-shadow: var(--shadow-premium);">
+                            <!-- Responsive SVG Vector Map of Houston Inner Loop -->
+                            <svg viewBox="0 0 800 600" class="houston-vector-map" id="houston-map-svg" style="width: 100%; height: auto; display: block; background: var(--bg-card);">
+                                <!-- Background Water & Land Details -->
+                                <rect width="800" height="600" fill="var(--bg-card)"></rect>
+                                
+                                <!-- Buffalo Bayou River Curve -->
+                                <path d="M 0 320 Q 200 300 350 280 T 550 250 T 800 240" fill="none" stroke="rgba(138, 28, 46, 0.08)" stroke-width="24" stroke-linecap="round"></path>
+                                <path d="M 0 320 Q 200 300 350 280 T 550 250 T 800 240" fill="none" stroke="rgba(138, 28, 46, 0.04)" stroke-width="40" stroke-linecap="round"></path>
+                                
+                                <!-- Major Highway Grid (610 Loop, I-10, US-59, I-45) -->
+                                <!-- Loop 610 (Outer Oval) -->
+                                <rect x="150" y="80" width="500" height="440" rx="200" ry="180" fill="none" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="12 6" opacity="0.35"></rect>
+                                <!-- I-10 East/West (Horizontal) -->
+                                <line x1="0" y1="200" x2="800" y2="200" stroke="var(--border-color)" stroke-width="1.5" opacity="0.25"></line>
+                                <!-- I-45 North/South (Vertical) -->
+                                <line x1="480" y1="0" x2="480" y2="600" stroke="var(--border-color)" stroke-width="1.5" opacity="0.25"></line>
+                                <!-- US-59 (Diagonal) -->
+                                <line x1="100" y1="0" x2="700" y2="600" stroke="var(--border-color)" stroke-width="1.5" opacity="0.25"></line>
+                                
+                                <!-- Grid Labels / Neighborhood Regions -->
+                                <text x="440" y="140" font-family="var(--font-heading)" font-size="11" font-weight="900" fill="var(--color-primary)" opacity="0.4" text-anchor="middle" letter-spacing="2">THE HEIGHTS</text>
+                                <text x="320" y="320" font-family="var(--font-heading)" font-size="11" font-weight="900" fill="var(--color-primary)" opacity="0.4" text-anchor="middle" letter-spacing="2">RIVER OAKS</text>
+                                <text x="210" y="240" font-family="var(--font-heading)" font-size="11" font-weight="900" fill="var(--color-primary)" opacity="0.4" text-anchor="middle" letter-spacing="2">MEMORIAL</text>
+                                <text x="560" y="280" font-family="var(--font-heading)" font-size="11" font-weight="900" fill="var(--color-primary)" opacity="0.4" text-anchor="middle" letter-spacing="2">DOWNTOWN</text>
+                                <text x="460" y="420" font-family="var(--font-heading)" font-size="11" font-weight="900" fill="var(--color-primary)" opacity="0.4" text-anchor="middle" letter-spacing="2">MUSEUM DISTRICT</text>
+                                <text x="100" y="490" font-family="var(--font-heading)" font-size="10" font-weight="900" fill="var(--color-primary)" opacity="0.3" text-anchor="middle" letter-spacing="1">SUGAR LAND</text>
+                                <text x="700" y="490" font-family="var(--font-heading)" font-size="10" font-weight="900" fill="var(--color-primary)" opacity="0.3" text-anchor="middle" letter-spacing="1">PEARLAND</text>
+
+                                <!-- Interactive SVG pins injected dynamically in app.js -->
+                                <g id="map-pins-layer"></g>
+                            </svg>
+                            <!-- Mini Listing Hover Preview Card -->
+                            <div class="map-hover-card" id="map-hover-card" style="display: none; position: absolute; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); padding: 8px 12px; box-shadow: var(--shadow-premium); z-index: 10; pointer-events: none; max-width: 220px;">
+                                <!-- Rendered dynamically by app.js -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -613,6 +697,10 @@
             </div>
         </div>
     </div>
+
+    <!-- Custom Editorial Cursor Elements -->
+    <div class="custom-cursor-dot" id="cursor-dot"></div>
+    <div class="custom-cursor-circle" id="cursor-circle"></div>
 
     <!-- Application Script -->
     <script src="app.js"></script>

@@ -182,6 +182,9 @@ let loggedInUser = sessionStorage.getItem('client_user') || 'client@donora.com';
 // 3. INITIALIZATION & ROUTING
 document.addEventListener('DOMContentLoaded', () => {
     initViews();
+    initTheme();
+    initCustomCursor();
+    initScrollEffects();
     renderFeaturedProperty();
     renderListings();
     initMortgageCalculator();
@@ -251,44 +254,52 @@ function initViews() {
     document.querySelector('.app-content').scrollTop = 0;
 }
 
-// App routing between view tabs
+// App routing between view tabs (wrapped in View Transitions if supported)
 function navigateTo(viewId) {
-    const views = document.querySelectorAll('.view');
-    const navItems = document.querySelectorAll('.nav-item');
-    const deskNavItems = document.querySelectorAll('.desktop-nav-item');
-    
-    // Deactivate all views and nav actions
-    views.forEach(v => v.classList.remove('active'));
-    navItems.forEach(n => n.classList.remove('active'));
-    deskNavItems.forEach(d => d.classList.remove('active'));
-    
-    // Activate target view
-    const targetView = document.getElementById(`view-${viewId}`);
-    if (targetView) {
-        targetView.classList.add('active');
-        // Reset scroll position on view switch
-        document.querySelector('.app-content').scrollTop = 0;
-    }
-    
-    // Activate mobile nav button
-    const targetNav = document.getElementById(`nav-btn-${viewId}`);
-    if (targetNav) {
-        targetNav.classList.add('active');
-    }
+    const performNavigation = () => {
+        const views = document.querySelectorAll('.view');
+        const navItems = document.querySelectorAll('.nav-item');
+        const deskNavItems = document.querySelectorAll('.desktop-nav-item');
+        
+        // Deactivate all views and nav actions
+        views.forEach(v => v.classList.remove('active'));
+        navItems.forEach(n => n.classList.remove('active'));
+        deskNavItems.forEach(d => d.classList.remove('active'));
+        
+        // Activate target view
+        const targetView = document.getElementById(`view-${viewId}`);
+        if (targetView) {
+            targetView.classList.add('active');
+            // Reset scroll position on view switch
+            document.querySelector('.app-content').scrollTop = 0;
+        }
+        
+        // Activate mobile nav button
+        const targetNav = document.getElementById(`nav-btn-${viewId}`);
+        if (targetNav) {
+            targetNav.classList.add('active');
+        }
 
-    // Activate desktop nav button
-    const targetDeskNav = document.getElementById(`desk-btn-${viewId}`);
-    if (targetDeskNav) {
-        targetDeskNav.classList.add('active');
-    }
+        // Activate desktop nav button
+        const targetDeskNav = document.getElementById(`desk-btn-${viewId}`);
+        if (targetDeskNav) {
+            targetDeskNav.classList.add('active');
+        }
 
-    // Specially handle views on navigation
-    if (viewId === 'favorites') {
-        renderFavorites();
-    } else if (viewId === 'book') {
-        renderBookedAppointments();
-    } else if (viewId === 'login') {
-        renderPortalView();
+        // Specially handle views on navigation
+        if (viewId === 'favorites') {
+            renderFavorites();
+        } else if (viewId === 'book') {
+            renderBookedAppointments();
+        } else if (viewId === 'login') {
+            renderPortalView();
+        }
+    };
+
+    if (document.startViewTransition) {
+        document.startViewTransition(performNavigation);
+    } else {
+        performNavigation();
     }
 }
 
@@ -588,7 +599,14 @@ function openPropertyDetails(listingId) {
         </div>
 
         <div class="info-section">
-            <h3 class="section-title">Description Brief</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h3 class="section-title" style="margin:0; padding:0; border:none;">Description Brief</h3>
+                <button onclick="toggleNarrator('${property.id}')" class="btn-card-secondary" id="narrator-btn" style="display:flex; align-items:center; gap:6px; padding:5px 10px; font-size:0.7rem; border-radius:50px; cursor:pointer;">
+                    <svg class="narrator-play-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <svg class="narrator-stop-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><rect x="6" y="6" width="12" height="12"></rect></svg>
+                    <span id="narrator-btn-text">Listen</span>
+                </button>
+            </div>
             <p class="detail-desc-para">${property.description}</p>
         </div>
 
@@ -1084,32 +1102,46 @@ function renderPortalView() {
 
                 <!-- Main Grid Layout -->
                 <div style="display:grid; grid-template-columns: 1fr; gap:20px; align-items:start;" id="portal-dashboard-grid">
-                    <!-- Left: Comparative reports -->
-                    <div class="booking-form-card">
-                        <h4 style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px; color:var(--color-primary);">My Document Library</h4>
-                        
-                        <div style="display:flex; flex-direction:column; gap:12px;">
-                            <a href="#" onclick="alert('Downloading Comparative Market Analysis (CMA) - Rosharon Estate.pdf (Simulated)')" class="portal-file-link">
-                                <div class="portal-file-info">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--color-primary); flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
-                                    <div>
-                                        <div class="portal-file-name">Comparative Market Assessment (CMA).pdf</div>
-                                        <span class="portal-file-meta">Prepared by Kameron Whitfield • August 2026</span>
+                    <!-- Left: Comparative reports & Chart -->
+                    <div style="display:flex; flex-direction:column; gap:20px;">
+                        <div class="booking-form-card">
+                            <h4 style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px; color:var(--color-primary);">My Document Library</h4>
+                            
+                            <div style="display:flex; flex-direction:column; gap:12px;">
+                                <a href="#" onclick="alert('Downloading Comparative Market Analysis (CMA) - Rosharon Estate.pdf (Simulated)')" class="portal-file-link">
+                                    <div class="portal-file-info">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--color-primary); flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
+                                        <div>
+                                            <div class="portal-file-name">Comparative Market Assessment (CMA).pdf</div>
+                                            <span class="portal-file-meta">Prepared by Kameron Whitfield • August 2026</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <span class="portal-file-action">Download</span>
-                            </a>
+                                    <span class="portal-file-action">Download</span>
+                                </a>
 
-                            <a href="#" onclick="alert('Downloading Houston Q3 Real Estate Indices.pdf (Simulated)')" class="portal-file-link">
-                                <div class="portal-file-info">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--color-primary); flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
-                                    <div>
-                                        <div class="portal-file-name">Houston Housing Market Index - Q3.pdf</div>
-                                        <span class="portal-file-meta">Regional MLS Analysis Summary</span>
+                                <a href="#" onclick="alert('Downloading Houston Q3 Real Estate Indices.pdf (Simulated)')" class="portal-file-link">
+                                    <div class="portal-file-info">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--color-primary); flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
+                                        <div>
+                                            <div class="portal-file-name">Houston Housing Market Index - Q3.pdf</div>
+                                            <span class="portal-file-meta">Regional MLS Analysis Summary</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <span class="portal-file-action">Download</span>
-                            </a>
+                                    <span class="portal-file-action">Download</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Market Intelligence Chart -->
+                        <div class="booking-form-card">
+                            <h4 style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px; color:var(--color-primary);">Market Intelligence (Heights vs River Oaks)</h4>
+                            <div style="position:relative; width:100%; height:160px; margin-top:8px;">
+                                <canvas id="market-trends-canvas" style="width:100%; height:100%; display:block;"></canvas>
+                            </div>
+                            <div style="display:flex; justify-content:center; gap:16px; margin-top:10px; font-size:0.68rem; font-weight:700;">
+                                <span style="display:flex; align-items:center; gap:4px;"><span style="display:inline-block; width:8px; height:8px; background-color:#8A1C2E; border-radius:50%;"></span>River Oaks (+12%)</span>
+                                <span style="display:flex; align-items:center; gap:4px;"><span style="display:inline-block; width:8px; height:8px; background-color:#D4AF37; border-radius:50%;"></span>Houston Heights (+8%)</span>
+                            </div>
                         </div>
                     </div>
 
@@ -1152,6 +1184,7 @@ function renderPortalView() {
 
         // Apply grid responsive adjust dynamically if viewport allows
         adjustPortalDashboardLayout();
+        setTimeout(renderMarketTrendsChart, 50);
     }
 }
 
@@ -1562,6 +1595,478 @@ function initReviewsCarousel() {
     startAutoPlay();
 }
 
+// 16. THEME TOGGLE (DARK MODE) SYSTEM
+function initTheme() {
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    if (!themeBtn) return;
+
+    const sunIcon = themeBtn.querySelector('.sun-icon');
+    const moonIcon = themeBtn.querySelector('.moon-icon');
+
+    // Retrieve active theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeUI(savedTheme);
+
+    themeBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        // Start transitions if supported
+        if (document.startViewTransition) {
+            document.startViewTransition(() => {
+                document.documentElement.setAttribute('data-theme', nextTheme);
+                localStorage.setItem('theme', nextTheme);
+                updateThemeUI(nextTheme);
+                // Re-render market trends chart to pick up dark-mode colors
+                renderMarketTrendsChart();
+            });
+        } else {
+            document.documentElement.setAttribute('data-theme', nextTheme);
+            localStorage.setItem('theme', nextTheme);
+            updateThemeUI(nextTheme);
+            renderMarketTrendsChart();
+        }
+    });
+
+    function updateThemeUI(theme) {
+        if (theme === 'dark') {
+            if (sunIcon) sunIcon.style.display = 'block';
+            if (moonIcon) moonIcon.style.display = 'none';
+        } else {
+            if (sunIcon) sunIcon.style.display = 'none';
+            if (moonIcon) moonIcon.style.display = 'block';
+        }
+    }
+}
+
+// 17. CUSTOM EDITORIAL CURSOR TRAILING
+function initCustomCursor() {
+    const dot = document.getElementById('cursor-dot');
+    const circle = document.getElementById('cursor-circle');
+    if (!dot || !circle) return;
+
+    let mouseX = 0, mouseY = 0;
+    let circleX = 0, circleY = 0;
+    let isHovering = false;
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Instant position for the dot
+        dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+    });
+
+    // Animate custom circle with smooth LERP trailing interpolation
+    function animateCircle() {
+        const dx = mouseX - circleX;
+        const dy = mouseY - circleY;
+        
+        circleX += dx * 0.15;
+        circleY += dy * 0.15;
+
+        const scale = isHovering ? 'scale(1.8)' : 'scale(1)';
+        circle.style.transform = `translate3d(${circleX}px, ${circleY}px, 0) ${scale}`;
+
+        requestAnimationFrame(animateCircle);
+    }
+    animateCircle();
+
+    // Hook listeners on interactive hover items to expand cursor scale
+    function addHoverListeners() {
+        const items = document.querySelectorAll('button, a, .listing-card, .contact-pill, .desktop-nav-item, input, select, textarea');
+        items.forEach(el => {
+            el.addEventListener('mouseenter', () => isHovering = true);
+            el.addEventListener('mouseleave', () => isHovering = false);
+        });
+    }
+    
+    // Add hover triggers
+    addHoverListeners();
+    
+    // Observe DOM mutations to bind new elements dynamically (e.g. listings grid shifts)
+    const observer = new MutationObserver(addHoverListeners);
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+// 18. SCROLL EFFECTS & REVEALS
+function initScrollEffects() {
+    const header = document.querySelector('.app-header');
+    const scrollContainer = document.querySelector('.app-content');
+
+    if (scrollContainer && header) {
+        scrollContainer.addEventListener('scroll', () => {
+            if (scrollContainer.scrollTop > 40) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+    }
+
+    // Scroll reveal observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    // Mark sections to reveal
+    const sections = document.querySelectorAll('.info-section, .booking-form-card, .editorial-lead-card');
+    sections.forEach(s => {
+        s.classList.add('reveal');
+        observer.observe(s);
+    });
+}
+
+// 19. LAYOUT VIEWS LAYOUT TOGGLER (LIST VS GEOMAP)
+let activeListingsLayout = 'list';
+function switchListingsLayout(layout) {
+    activeListingsLayout = layout;
+
+    const listBtn = document.getElementById('btn-list-view');
+    const mapBtn = document.getElementById('btn-map-view');
+    const listGrid = document.getElementById('listings-container');
+    const mapContainer = document.getElementById('listings-map-container');
+
+    if (!listBtn || !mapBtn || !listGrid || !mapContainer) return;
+
+    if (layout === 'map') {
+        listBtn.classList.remove('active');
+        listBtn.style.background = 'none';
+        listBtn.style.color = 'var(--color-text-sub)';
+
+        mapBtn.classList.add('active');
+        mapBtn.style.background = 'var(--color-primary)';
+        mapBtn.style.color = '#FFFFFF';
+
+        listGrid.style.display = 'none';
+        mapContainer.style.display = 'block';
+        
+        // Draw pins onto the SVG Map
+        renderMapPins();
+    } else {
+        mapBtn.classList.remove('active');
+        mapBtn.style.background = 'none';
+        mapBtn.style.color = 'var(--color-text-sub)';
+
+        listBtn.classList.add('active');
+        listBtn.style.background = 'var(--color-primary)';
+        listBtn.style.color = '#FFFFFF';
+
+        mapContainer.style.display = 'none';
+        listGrid.style.display = 'grid';
+    }
+}
+
+// 20. GEOMAP PIN RENDERER
+function renderMapPins() {
+    const pinsLayer = document.getElementById('map-pins-layer');
+    const hoverCard = document.getElementById('map-hover-card');
+    const svg = document.getElementById('houston-map-svg');
+    if (!pinsLayer || !hoverCard || !svg) return;
+
+    // Filter current properties matches search/tab inputs
+    const query = activeFilters.search;
+    const cat = activeFilters.category;
+
+    const filtered = listingsData.filter(item => {
+        // Search filter
+        const matchSearch = !query || 
+            item.address.toLowerCase().includes(query) || 
+            item.subdivision.toLowerCase().includes(query) ||
+            item.marketArea.toLowerCase().includes(query);
+
+        // Category filter
+        let matchCat = true;
+        if (cat === 'sale') matchCat = item.mode === 'sale';
+        else if (cat === 'rent') matchCat = item.mode === 'rent';
+        else if (cat === 'sold') matchCat = item.mode === 'sold';
+
+        return matchSearch && matchCat;
+    });
+
+    const mapCoords = {
+        "90218765": { x: 180, y: 460 },
+        "82627271": { x: 450, y: 380 },
+        "67593063": { x: 470, y: 390 },
+        "35705852": { x: 430, y: 410 },
+        "37115870": { x: 490, y: 400 },
+        "69685250": { x: 200, y: 470 },
+        "66730524": { x: 280, y: 330 },
+        "41091184": { x: 120, y: 220 }
+    };
+
+    pinsLayer.innerHTML = filtered.map(item => {
+        const coords = mapCoords[item.id];
+        if (!coords) return '';
+
+        return `
+            <g class="map-pin" transform="translate(${coords.x}, ${coords.y})" onclick="openPropertyDetails('${item.id}')" style="cursor:pointer;" data-id="${item.id}">
+                <!-- Outer Pulsing Ring -->
+                <circle r="12" fill="var(--color-primary)" opacity="0.3" class="map-pulse-ring">
+                    <animate attributeName="r" values="8;18;8" dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <!-- Inner Pin Dot -->
+                <circle r="6" fill="var(--color-primary)" stroke="#FFFFFF" stroke-width="1.5"></circle>
+            </g>
+        `;
+    }).join('');
+
+    // Attach hover listeners to group nodes
+    const pins = pinsLayer.querySelectorAll('.map-pin');
+    pins.forEach(pin => {
+        pin.addEventListener('mouseenter', (e) => {
+            const id = pin.getAttribute('data-id');
+            const item = listingsData.find(p => p.id === id);
+            if (!item) return;
+
+            const rect = svg.getBoundingClientRect();
+            const coords = mapCoords[id];
+            
+            // Map coordinates relative to current client container bounding box
+            const pctX = coords.x / 800;
+            const pctY = coords.y / 600;
+            
+            const cardX = rect.left + (rect.width * pctX) - (window.pageXOffset || 0);
+            const cardY = rect.top + (rect.height * pctY) - (window.pageYOffset || 0) - 95;
+
+            hoverCard.innerHTML = `
+                <div style="font-weight:800; font-size:0.72rem; color:var(--color-primary);">$${item.price.toLocaleString()}</div>
+                <div style="font-size:0.65rem; font-weight:700; color:var(--color-text-main); margin-top:2px;">${item.address}</div>
+                <div style="font-size:0.58rem; color:var(--color-text-sub);">${item.marketArea}</div>
+            `;
+
+            // Position and show card preview
+            const wrapper = svg.parentElement;
+            const wrapperRect = wrapper.getBoundingClientRect();
+            hoverCard.style.left = `${(coords.x / 800) * wrapperRect.width - 110}px`;
+            hoverCard.style.top = `${(coords.y / 600) * wrapperRect.height - 90}px`;
+            hoverCard.style.display = 'block';
+        });
+
+        pin.addEventListener('mouseleave', () => {
+            hoverCard.style.display = 'none';
+        });
+    });
+}
+
+// 21. CONVERSATIONAL LEAD POPUP QUIZ CONTROLLER
+let activeQuizGoal = '';
+let activeQuizBudget = '';
+
+function selectQuizGoal(goal) {
+    activeQuizGoal = goal;
+    const step1 = document.getElementById('quiz-step-1');
+    const step2 = document.getElementById('quiz-step-2');
+    if (step1 && step2) {
+        step1.style.display = 'none';
+        step2.style.display = 'block';
+    }
+}
+
+function selectQuizBudget(budget) {
+    activeQuizBudget = budget;
+    const step2 = document.getElementById('quiz-step-2');
+    const step3 = document.getElementById('quiz-step-3');
+    if (step2 && step3) {
+        step2.style.display = 'none';
+        step3.style.display = 'block';
+    }
+}
+
+function prevQuizStep(step) {
+    const step1 = document.getElementById('quiz-step-1');
+    const step2 = document.getElementById('quiz-step-2');
+    const step3 = document.getElementById('quiz-step-3');
+
+    if (step === 1) {
+        if (step2) step2.style.display = 'none';
+        if (step1) step1.style.display = 'block';
+    } else if (step === 2) {
+        if (step3) step3.style.display = 'none';
+        if (step2) step2.style.display = 'block';
+    }
+}
+
+// 22. DYNAMIC MARKET INTELLIGENCE CANVAS GRAPH
+function renderMarketTrendsChart() {
+    const canvas = document.getElementById('market-trends-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    
+    // Scale canvas for high-DPI displays
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    const w = rect.width;
+    const h = rect.height;
+    const padding = { top: 15, right: 15, bottom: 25, left: 45 };
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Read grid/text variables from DOM context dynamically
+    const gridStyle = getComputedStyle(document.documentElement);
+    const borderColor = gridStyle.getPropertyValue('--border-color').trim() || 'rgba(0,0,0,0.08)';
+    const textMuted = gridStyle.getPropertyValue('--color-text-sub').trim() || '#A89C94';
+    const primaryColor = gridStyle.getPropertyValue('--color-primary').trim() || '#8A1C2E';
+
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    // Y-axis grid lines
+    for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (i * (h - padding.top - padding.bottom) / 4);
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(w - padding.right, y);
+        
+        // Draw grid labels
+        ctx.fillStyle = textMuted;
+        ctx.font = '600 9px sans-serif';
+        ctx.textAlign = 'right';
+        const val = 2000000 - (i * 400000);
+        ctx.fillText(`$${(val / 1000).toFixed(0)}k`, padding.left - 8, y + 3);
+    }
+    ctx.stroke();
+
+    // Data points (Jan, Mar, May, Jul, Sep, Nov)
+    const months = ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'];
+    const riverOaks = [1200000, 1350000, 1480000, 1600000, 1750000, 1850000];
+    const heights = [750000, 800000, 830000, 890000, 920000, 980000];
+
+    const chartW = w - padding.left - padding.right;
+    const chartH = h - padding.top - padding.bottom;
+
+    // Draw X labels
+    ctx.textAlign = 'center';
+    months.forEach((m, idx) => {
+        const x = padding.left + (idx * chartW / (months.length - 1));
+        ctx.fillStyle = textMuted;
+        ctx.fillText(m, x, h - 8);
+    });
+
+    // Helper to map values to coordinates
+    const getX = (idx) => padding.left + (idx * chartW / (months.length - 1));
+    const getY = (val) => {
+        const minVal = 400000;
+        const maxVal = 2000000;
+        return padding.top + chartH - ((val - minVal) / (maxVal - minVal) * chartH);
+    };
+
+    // Draw River Oaks line (Crimson)
+    ctx.strokeStyle = primaryColor;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    riverOaks.forEach((val, idx) => {
+        if (idx === 0) ctx.moveTo(getX(idx), getY(val));
+        else ctx.lineTo(getX(idx), getY(val));
+    });
+    ctx.stroke();
+
+    // Draw Heights line (Gold)
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    heights.forEach((val, idx) => {
+        if (idx === 0) ctx.moveTo(getX(idx), getY(val));
+        else ctx.lineTo(getX(idx), getY(val));
+    });
+    ctx.stroke();
+
+    // Draw dots
+    ctx.lineWidth = 2;
+    riverOaks.forEach((val, idx) => {
+        ctx.fillStyle = primaryColor;
+        ctx.strokeStyle = '#FCFAF6';
+        ctx.beginPath();
+        ctx.arc(getX(idx), getY(val), 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+    });
+
+    heights.forEach((val, idx) => {
+        ctx.fillStyle = '#D4AF37';
+        ctx.strokeStyle = '#FCFAF6';
+        ctx.beginPath();
+        ctx.arc(getX(idx), getY(val), 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+    });
+}
+
+// 23. TEXT-TO-SPEECH NARRATOR CONTROLLER
+let narratorUtterance = null;
+let isNarrating = false;
+
+function toggleNarrator(listingId) {
+    const property = listingsData.find(item => item.id === listingId);
+    if (!property) return;
+
+    const btn = document.getElementById('narrator-btn');
+    const playIcon = btn.querySelector('.narrator-play-icon');
+    const stopIcon = btn.querySelector('.narrator-stop-icon');
+    const btnText = document.getElementById('narrator-btn-text');
+
+    if (isNarrating) {
+        // Stop current speech
+        window.speechSynthesis.cancel();
+        isNarrating = false;
+        if (playIcon) playIcon.style.display = 'block';
+        if (stopIcon) stopIcon.style.display = 'none';
+        if (btnText) btnText.textContent = 'Listen';
+    } else {
+        // Start description speech synthesis
+        window.speechSynthesis.cancel(); // safety cancel first
+        
+        const textToSpeak = `Represented by Kameron Whitfield. Located at ${property.address} in ${property.city}. ${property.description}`;
+        narratorUtterance = new SpeechSynthesisUtterance(textToSpeak);
+        
+        // Find professional voice if possible
+        const voices = window.speechSynthesis.getVoices();
+        const preferredVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural')));
+        if (preferredVoice) {
+            narratorUtterance.voice = preferredVoice;
+        }
+
+        narratorUtterance.onend = () => {
+            isNarrating = false;
+            if (playIcon) playIcon.style.display = 'block';
+            if (stopIcon) stopIcon.style.display = 'none';
+            if (btnText) btnText.textContent = 'Listen';
+        };
+
+        narratorUtterance.onerror = () => {
+            isNarrating = false;
+            if (playIcon) playIcon.style.display = 'block';
+            if (stopIcon) stopIcon.style.display = 'none';
+            if (btnText) btnText.textContent = 'Listen';
+        };
+
+        isNarrating = true;
+        if (playIcon) playIcon.style.display = 'none';
+        if (stopIcon) stopIcon.style.display = 'block';
+        if (btnText) btnText.textContent = 'Stop';
+        
+        window.speechSynthesis.speak(narratorUtterance);
+    }
+}
+
+// Make sure speech ends if bottom details modal is closed
+const oldCloseDetailsSheet = closeDetailsSheet;
+closeDetailsSheet = function() {
+    window.speechSynthesis.cancel();
+    isNarrating = false;
+    oldCloseDetailsSheet();
+};
+
 // Global exposure of navigation helpers for inline HTML button triggers
 window.navigateTo = navigateTo;
 window.toggleFavorite = toggleFavorite;
@@ -1582,3 +2087,13 @@ window.openLegalModal = openLegalModal;
 window.closeLegalModal = closeLegalModal;
 window.initVideoPlayer = initVideoPlayer;
 window.initReviewsCarousel = initReviewsCarousel;
+window.initTheme = initTheme;
+window.initCustomCursor = initCustomCursor;
+window.initScrollEffects = initScrollEffects;
+window.switchListingsLayout = switchListingsLayout;
+window.renderMapPins = renderMapPins;
+window.selectQuizGoal = selectQuizGoal;
+window.selectQuizBudget = selectQuizBudget;
+window.prevQuizStep = prevQuizStep;
+window.renderMarketTrendsChart = renderMarketTrendsChart;
+window.toggleNarrator = toggleNarrator;
