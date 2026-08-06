@@ -40,18 +40,19 @@ body {
     position: relative;
 }
 
-/* Strong Diagonal DRAFT Watermark Overlay */
+/* Strong Diagonal DRAFT Watermark Overlay (Prominent but blend-safe) */
 body::after {
     content: "DRAFT";
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) rotate(-40deg);
+    transform: translate(-50%, -50%) rotate(-45deg);
     font-family: var(--font-heading);
     font-weight: 900;
-    font-size: 8.5rem;
-    letter-spacing: 12px;
-    color: rgba(138, 28, 46, 0.07); /* Clear semi-transparent Crimson watermark */
+    font-size: 9.5rem;
+    letter-spacing: 15px;
+    color: rgba(138, 28, 46, 0.13); /* Prominent semi-transparent Crimson watermark */
+    mix-blend-mode: multiply; /* Blends cleanly with background and leaves text 100% visible */
     pointer-events: none;
     z-index: 99999;
     user-select: none;
