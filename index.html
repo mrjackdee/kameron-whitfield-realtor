@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Kameron Whitfield, TX Real Estate Agent - All City Real Estate. Interactive mobile-first listings, mortgage calculator, and booking platform.">
+    <title>Kameron Whitfield | Real Estate Professional</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Satisfy&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <!-- App Container to enforce mobile frame on desktop, responsive on mobile -->
+    <div class="app-shell">
+        <!-- Top Sticky Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="brand">
+                    <span class="brand-title">Kameron Whitfield</span>
+                    <span class="brand-subtitle">All City Real Estate</span>
+                </div>
+                <div class="header-actions">
+                    <a href="tel:2819956551" class="header-icon-btn" aria-label="Call Kameron">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area with View Containers -->
+        <main class="app-content">
+            <!-- 1. HOME VIEW -->
+            <section id="view-home" class="view active">
+                <div class="hero-card">
+                    <div class="hero-overlay"></div>
+                    <img src="https://pics.harstatic.com/realtors/kmaurw_400x400.jpg" alt="Kameron Whitfield" class="hero-avatar" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400'">
+                    <div class="hero-info">
+                        <span class="realtor-tag">Residential Specialist</span>
+                        <h1 class="realtor-name">Kameron Whitfield</h1>
+                        <p class="realtor-creds">CPM • C.P.S. • CRP • C.S.S.</p>
+                        <div class="signature">Kameron Whitfield</div>
+                    </div>
+                </div>
+
+                <div class="view-padding">
+                    <!-- Quick Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-num">5+</div>
+                            <div class="stat-label">Years Exp.</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-num">6</div>
+                            <div class="stat-label">Active/Sold</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-num">4+</div>
+                            <div class="stat-label">Houston Zones</div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Bar Quick Links -->
+                    <div class="quick-contact-bar">
+                        <a href="tel:2819956551" class="contact-pill">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            Call Agent
+                        </a>
+                        <a href="sms:2819956551" class="contact-pill">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            Text SMS
+                        </a>
+                        <button onclick="navigateTo('book')" class="contact-pill highlight">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            Book Consultation
+                        </button>
+                    </div>
+
+                    <!-- About Accordion / Bio -->
+                    <div class="info-section">
+                        <h2 class="section-title">About Kameron</h2>
+                        <div class="bio-wrapper">
+                            <p class="bio-text">
+                                Kameron Whitfield is a residential specialist with Realinc's Office of Jason T. Hyman. As an agent with years of professional experience in higher education, he effortlessly guides individuals through the many life transitions that lead to the purchase and sale of property. His commitment is to educate and empower clients to achieve their goals in the communities of their choice.
+                            </p>
+                            <div class="bio-collapse-content" id="extended-bio">
+                                <p class="bio-text">
+                                    Prior to joining the Realinc team, Kameron used his talents as a leader to foster best practices that improved the quality of life for student and faculty members at universities across the country. As a native Houstonian, he desires to do the same for individuals looking to live and thrive in the historic communities that make the city what it is today.
+                                </p>
+                                <p class="bio-text">
+                                    Kameron is no stranger to using his talents and educational background to serve his community. He is a proud alumnus of the Whitlowe R. Green College of Education at Prairie View A & M University and an active member of Kappa Alpha Psi, Fraternity Incorporated where he serves as Membership Training Academy and Scholarship Committee. In his downtime, Kameron loves to sing and spend quality time with his family and friends.
+                                </p>
+                            </div>
+                            <button id="btn-toggle-bio" class="btn-text-gold">Read More ↓</button>
+                        </div>
+                    </div>
+
+                    <!-- Credentials / Specializations List -->
+                    <div class="info-section">
+                        <h2 class="section-title">Expertise & Designations</h2>
+                        <div class="designation-slider">
+                            <div class="designation-item">
+                                <span class="badge-gold">CPM</span>
+                                <div>
+                                    <div class="desig-name">Certified Property Manager®</div>
+                                    <div class="desig-desc">Expertise in residential and commercial asset management, recognized by NAR.</div>
+                                </div>
+                            </div>
+                            <div class="designation-item">
+                                <span class="badge-gold">CRP</span>
+                                <div>
+                                    <div class="desig-name">Certified Relocation Professional</div>
+                                    <div class="desig-desc">Demonstrated knowledge in corporate and individual relocation facilitation.</div>
+                                </div>
+                            </div>
+                            <div class="designation-item">
+                                <span class="badge-gold">C.P.S.</span>
+                                <div>
+                                    <div class="desig-name">Property Management Specialist</div>
+                                    <div class="desig-desc">Expert systems in leasing, tenant placement, and asset optimization.</div>
+                                </div>
+                            </div>
+                            <div class="designation-item">
+                                <span class="badge-gold">C.S.S.</span>
+                                <div>
+                                    <div class="desig-name">Certified Seniors Specialist</div>
+                                    <div class="desig-desc">Specialized services tailored to the 55+ active demographic.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Featured Property Widget -->
+                    <div class="info-section">
+                        <h2 class="section-title">Featured Listing</h2>
+                        <div class="featured-listing-card" id="featured-property-target">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Social Icons Section -->
+                    <div class="social-wrapper">
+                        <h3>Connect on Social</h3>
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/kameron_whitfieldrealtor/" target="_blank" aria-label="Instagram Profile" class="social-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                            </a>
+                            <a href="https://www.facebook.com/kmaur.pi" target="_blank" aria-label="Facebook Profile" class="social-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                            </a>
+                            <a href="https://www.linkedin.com/in/kameron-whitfield-m-ed-74095796/" target="_blank" aria-label="LinkedIn Profile" class="social-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. LISTINGS VIEW -->
+            <section id="view-listings" class="view">
+                <div class="listings-sticky-bar">
+                    <div class="search-box">
+                        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="listing-search-input" placeholder="Search address, neighborhood...">
+                    </div>
+                    <div class="filter-tabs">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="sale">For Sale</button>
+                        <button class="filter-btn" data-filter="rent">For Rent</button>
+                        <button class="filter-btn" data-filter="sold">Recently Sold</button>
+                    </div>
+                </div>
+                
+                <div class="view-padding">
+                    <div class="listings-grid" id="listings-container">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. MORTGAGE CALCULATOR VIEW -->
+            <section id="view-calculator" class="view">
+                <div class="calc-header">
+                    <h2>Mortgage Calculator</h2>
+                    <p>Calculate your estimated monthly payment</p>
+                </div>
+                <div class="view-padding">
+                    <div class="calculator-card">
+                        <!-- Home Price -->
+                        <div class="calc-input-group">
+                            <div class="input-labels">
+                                <label for="calc-home-price">Home Price</label>
+                                <span class="val-display" id="val-home-price">$207,000</span>
+                            </div>
+                            <input type="range" id="calc-home-price" min="50000" max="1500000" step="5000" value="207000" class="gold-range">
+                        </div>
+
+                        <!-- Down Payment -->
+                        <div class="calc-input-group">
+                            <div class="input-labels">
+                                <label for="calc-down-payment">Down Payment (%)</label>
+                                <span class="val-display" id="val-down-payment">20% ($41,400)</span>
+                            </div>
+                            <input type="range" id="calc-down-payment" min="0" max="80" step="1" value="20" class="gold-range">
+                        </div>
+
+                        <!-- Interest Rate -->
+                        <div class="calc-input-group">
+                            <div class="input-labels">
+                                <label for="calc-interest-rate">Interest Rate (%)</label>
+                                <span class="val-display" id="val-interest-rate">6.5%</span>
+                            </div>
+                            <input type="range" id="calc-interest-rate" min="1" max="15" step="0.1" value="6.5" class="gold-range">
+                        </div>
+
+                        <!-- Loan Term -->
+                        <div class="calc-input-group">
+                            <div class="input-labels">
+                                <label for="calc-loan-term">Loan Term</label>
+                                <span class="val-display" id="val-loan-term">30 Years</span>
+                            </div>
+                            <div class="term-toggle-buttons">
+                                <button class="term-btn active" data-term="30">30 Years</button>
+                                <button class="term-btn" data-term="15">15 Years</button>
+                                <button class="term-btn" data-term="10">10 Years</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Breakdown Card -->
+                    <div class="calculator-card result-card">
+                        <div class="payment-summary">
+                            <div class="payment-title">Estimated Monthly Payment</div>
+                            <div class="payment-value" id="payment-output">$1,046</div>
+                        </div>
+
+                        <!-- Custom Dynamic Bar Graph representing principal/taxes/insurance -->
+                        <div class="breakdown-chart">
+                            <div class="chart-bar" id="chart-bar-principal" style="width: 70%;" title="Principal & Interest"></div>
+                            <div class="chart-bar" id="chart-bar-taxes" style="width: 20%;" title="Taxes (Est.)"></div>
+                            <div class="chart-bar" id="chart-bar-insurance" style="width: 10%;" title="Insurance (Est.)"></div>
+                        </div>
+
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span class="legend-color principal"></span>
+                                <span>Principal & Interest: <strong id="legend-val-principal">$847</strong></span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color taxes"></span>
+                                <span>Property Taxes (Est.): <strong id="legend-val-taxes">$149</strong></span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color insurance"></span>
+                                <span>Home Insurance (Est.): <strong id="legend-val-insurance">$50</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. BOOKING VIEW -->
+            <section id="view-book" class="view">
+                <div class="calc-header">
+                    <h2>Schedule Consultation</h2>
+                    <p>Book a call or physical walkthrough with Kameron</p>
+                </div>
+                <div class="view-padding">
+                    <!-- Form Container -->
+                    <form id="booking-form" class="booking-form-card">
+                        <div class="form-group">
+                            <label for="book-name">Full Name</label>
+                            <input type="text" id="book-name" required placeholder="John Doe">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="book-phone">Phone Number</label>
+                                <input type="tel" id="book-phone" required placeholder="(281) 555-0199">
+                            </div>
+                            <div class="form-group">
+                                <label for="book-email">Email Address</label>
+                                <input type="email" id="book-email" required placeholder="john@example.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="book-service">Service Requested</label>
+                            <select id="book-service">
+                                <option value="showing">Schedule Property Showing</option>
+                                <option value="buy_consult">Home Buyer Consultation</option>
+                                <option value="sell_consult">Home Seller Consultation</option>
+                                <option value="general">General Real Estate Query</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="property-select-group" style="display:none;">
+                            <label for="book-property">Property of Interest</label>
+                            <input type="text" id="book-property" placeholder="e.g., 5206 Willow Glen Dr">
+                        </div>
+
+                        <!-- Date/Time Picker -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="book-date">Choose Date</label>
+                                <input type="date" id="book-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-time">Choose Time Slot</label>
+                                <select id="book-time" required>
+                                    <option value="">Select a time</option>
+                                    <option value="09:00 AM">09:00 AM</option>
+                                    <option value="11:00 AM">11:00 AM</option>
+                                    <option value="01:30 PM">01:30 PM</option>
+                                    <option value="03:30 PM">03:30 PM</option>
+                                    <option value="05:30 PM">05:30 PM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="book-message">Additional Notes</label>
+                            <textarea id="book-message" rows="3" placeholder="Any details you'd like to share..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-gold-submit">Request Appointment</button>
+                    </form>
+                    
+                    <!-- Confirmation Dialog / Success Sheet -->
+                    <div id="booking-success-card" class="booking-form-card success-state" style="display:none;">
+                        <div class="success-icon-wrap">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <h3>Consultation Requested!</h3>
+                        <p class="success-message">Thank you. Kameron Whitfield will contact you shortly to confirm your booking.</p>
+                        
+                        <div class="success-summary">
+                            <div class="summary-line"><strong>Type:</strong> <span id="summary-type">Consultation</span></div>
+                            <div class="summary-line"><strong>Date:</strong> <span id="summary-date">August 12, 2026</span></div>
+                            <div class="summary-line"><strong>Time:</strong> <span id="summary-time">1:30 PM</span></div>
+                            <div class="summary-line" id="summary-prop-row" style="display:none;"><strong>Property:</strong> <span id="summary-property">N/A</span></div>
+                        </div>
+
+                        <button onclick="resetBookingForm()" class="btn-secondary-submit">Schedule Another Call</button>
+                    </div>
+
+                    <!-- Booked Appointments (LocalStorage Tracker) -->
+                    <div id="my-appointments-section" class="info-section mt-4" style="display: none;">
+                        <h2 class="section-title">Your Scheduled Consultations</h2>
+                        <div id="appointments-list-container">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. FAVORITES VIEW -->
+            <section id="view-favorites" class="view">
+                <div class="calc-header">
+                    <h2>Saved Properties</h2>
+                    <p>Properties you bookmarked for review</p>
+                </div>
+                <div class="view-padding">
+                    <div class="listings-grid" id="favorites-container">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div class="empty-favorites" id="empty-favorites-view">
+                        <div class="empty-heart-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        </div>
+                        <h3>No Saved Properties</h3>
+                        <p>Bookmark listings to easily access them here later.</p>
+                        <button onclick="navigateTo('listings')" class="btn-gold-submit" style="width: auto; padding: 12px 24px;">Explore Listings</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar (Simulates mobile OS bar) -->
+        <nav class="app-nav">
+            <button class="nav-item active" id="nav-btn-home" onclick="navigateTo('home')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Home</span>
+            </button>
+            <button class="nav-item" id="nav-btn-listings" onclick="navigateTo('listings')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></svg>
+                <span>Listings</span>
+            </button>
+            <button class="nav-item" id="nav-btn-calculator" onclick="navigateTo('calculator')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="16"></line><line x1="15" y1="22" x2="15" y2="16"></line><line x1="18" y1="16" x2="6" y2="16"></line><line x1="18" y1="12" x2="6" y2="12"></line><line x1="6" y1="8" x2="18" y2="8"></line><line x1="14" y1="8" x2="14" y2="16"></line></svg>
+                <span>Calculator</span>
+            </button>
+            <button class="nav-item" id="nav-btn-book" onclick="navigateTo('book')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>Book</span>
+            </button>
+            <button class="nav-item" id="nav-btn-favorites" onclick="navigateTo('favorites')">
+                <div class="fav-icon-wrapper">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <span class="fav-badge" id="fav-count-badge" style="display: none;">0</span>
+                </div>
+                <span>Saved</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Details Overlay Panel (Simulating iOS/Android Bottom Sheet modal) -->
+    <div id="details-bottom-sheet" class="bottom-sheet" aria-hidden="true">
+        <div class="bottom-sheet-backdrop" onclick="closeDetailsSheet()"></div>
+        <div class="bottom-sheet-content">
+            <div class="sheet-handle" onclick="closeDetailsSheet()"></div>
+            <button class="sheet-close-btn" onclick="closeDetailsSheet()" aria-label="Close details">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            
+            <div class="sheet-body" id="sheet-body-content">
+                <!-- Dynamically populated detail markup -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
