@@ -1087,26 +1087,26 @@ function renderPortalView() {
                         <h4 style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px; color:var(--color-primary);">My Document Library</h4>
                         
                         <div style="display:flex; flex-direction:column; gap:12px;">
-                            <a href="#" onclick="alert('Downloading Comparative Market Analysis (CMA) - Rosharon Estate.pdf (Simulated)')" class="dropdown-item" style="border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:12px; display:flex; justify-content:space-between; align-items:center;">
-                                <div style="display:flex; align-items:center; gap:10px;">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
+                            <a href="#" onclick="alert('Downloading Comparative Market Analysis (CMA) - Rosharon Estate.pdf (Simulated)')" class="portal-file-link">
+                                <div class="portal-file-info">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--color-primary); flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
                                     <div>
-                                        <div style="font-weight:700; font-size:0.8rem; color:var(--color-text-main);">Comparative Market Assessment (CMA).pdf</div>
-                                        <span style="font-size:0.68rem; color:var(--color-text-sub);">Prepared by Kameron Whitfield • August 2026</span>
+                                        <div class="portal-file-name">Comparative Market Assessment (CMA).pdf</div>
+                                        <span class="portal-file-meta">Prepared by Kameron Whitfield • August 2026</span>
                                     </div>
                                 </div>
-                                <span style="font-size:0.65rem; color:var(--color-primary); font-weight:800; text-transform:uppercase;">Download</span>
+                                <span class="portal-file-action">Download</span>
                             </a>
 
-                            <a href="#" onclick="alert('Downloading Houston Q3 Real Estate Indices.pdf (Simulated)')" class="dropdown-item" style="border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:12px; display:flex; justify-content:space-between; align-items:center;">
-                                <div style="display:flex; align-items:center; gap:10px;">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
+                            <a href="#" onclick="alert('Downloading Houston Q3 Real Estate Indices.pdf (Simulated)')" class="portal-file-link">
+                                <div class="portal-file-info">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--color-primary); flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5"></path></svg>
                                     <div>
-                                        <div style="font-weight:700; font-size:0.8rem; color:var(--color-text-main);">Houston Housing Market Index - Q3.pdf</div>
-                                        <span style="font-size:0.68rem; color:var(--color-text-sub);">Regional MLS Analysis Summary</span>
+                                        <div class="portal-file-name">Houston Housing Market Index - Q3.pdf</div>
+                                        <span class="portal-file-meta">Regional MLS Analysis Summary</span>
                                     </div>
                                 </div>
-                                <span style="font-size:0.65rem; color:var(--color-primary); font-weight:800; text-transform:uppercase;">Download</span>
+                                <span class="portal-file-action">Download</span>
                             </a>
                         </div>
                     </div>

@@ -1613,10 +1613,20 @@ body::after {
     padding: 12px 14px;
     margin-bottom: 10px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
     box-shadow: var(--shadow-premium);
     transition: transform 0.2s ease;
+}
+
+@media (min-width: 480px) {
+    .apt-card {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0;
+    }
 }
 
 .apt-card:hover {
@@ -1799,12 +1809,12 @@ body::after {
 
 /* Bottom Sheet Modal Component */
 .bottom-sheet {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
     display: none;
     overflow: hidden;
 }
@@ -2287,5 +2297,75 @@ body::after {
 
     .listings-sticky-bar {
         padding: 16px 24px;
+    }
+}
+
+/* Portal Document Library links styled for clean wrapping on mobile */
+.portal-file-link {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-card);
+    text-decoration: none;
+    gap: 12px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-file-link:hover {
+    background-color: rgba(138, 28, 46, 0.04);
+    transform: translateY(-1px);
+}
+
+.portal-file-link:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+.portal-file-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.portal-file-name {
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--color-text-main);
+    white-space: normal;
+    word-break: break-word;
+    text-align: left;
+}
+
+.portal-file-meta {
+    font-size: 0.68rem;
+    color: var(--color-text-sub);
+    display: block;
+    margin-top: 2px;
+    text-align: left;
+}
+
+.portal-file-action {
+    font-size: 0.65rem;
+    color: var(--color-primary);
+    font-weight: 800;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+/* Explicit placeholder sizing for mobile Safari contrast */
+input::placeholder, 
+select::placeholder, 
+textarea::placeholder {
+    color: var(--color-text-dark);
+    opacity: 0.7;
+}
+
+@media (max-width: 360px) {
+    .hero-email-cta {
+        font-size: 0.72rem;
+        padding: 8px 12px;
     }
 }
