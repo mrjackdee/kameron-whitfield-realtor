@@ -488,7 +488,7 @@ body {
     line-height: 1.4;
 }
 
-/* Bespoke Lead Cards & Editorial Styling */
+/* Professional Lead Cards & Editorial Styling */
 .editorial-lead-card {
     background-color: #8A1C2E;
     color: #FFFFFF;
@@ -1749,7 +1749,7 @@ body {
         grid-row: 2 / span 2;
     }
 
-    #view-home .info-section:nth-of-type(4) { /* Bespoke Valuation Card */
+    #view-home .info-section:nth-of-type(4) { /* CMA Card */
         grid-column: 2;
         grid-row: 4;
     }
