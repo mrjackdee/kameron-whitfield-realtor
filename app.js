@@ -1,11 +1,11 @@
-// Realtor App Model and Controller - Kameron Whitfield
+// Realtor App Model and Controller - Kameron Whitfield (Crimson & Cream Editorial Edition)
 
 // 1. DATA MODEL
 const realtorInfo = {
     name: "Kameron Whitfield",
     brokerage: "All City Real Estate",
     phone: "281-995-6551",
-    email: "kwhitfield.realtor@gmail.com", // Professional representation
+    email: "kwhitfield.realtor@gmail.com",
     address: "4201 Main St #200-137, Houston, TX 77002",
     designations: ["CPM", "C.P.S.", "CRP", "C.S.S."],
     about: "Kameron Whitfield is a residential specialist with Realinc's Office of Jason T. Hyman. As an agent with years of professional experience in higher education, he effortlessly guides individuals through the many life transitions that lead to the purchase and sale of property. His commitment is to educate and empower clients to achieve their goals in the communities of their choice."
@@ -184,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderListings();
     initMortgageCalculator();
     initBookingForm();
+    initGazetteForm();
     updateFavoritesBadge();
     
     // Toggle bio event
@@ -194,10 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const isExpanded = extendedBio.classList.contains('expanded');
             if (isExpanded) {
                 extendedBio.classList.remove('expanded');
-                btnToggleBio.textContent = 'Read More ↓';
+                btnToggleBio.textContent = 'Read Biography ↓';
             } else {
                 extendedBio.classList.add('expanded');
-                btnToggleBio.textContent = 'Read Less ↑';
+                btnToggleBio.textContent = 'Collapse Biography ↑';
             }
         });
     }
@@ -223,7 +224,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// App routing between bottom tabs
+function initViews() {
+    // Make sure initial view scroll configuration is correct
+    document.querySelector('.app-content').scrollTop = 0;
+}
+
+// App routing between view tabs
 function navigateTo(viewId) {
     const views = document.querySelectorAll('.view');
     const navItems = document.querySelectorAll('.nav-item');
@@ -267,12 +273,12 @@ function renderFeaturedProperty() {
     const target = document.getElementById('featured-property-target');
     if (!target) return;
     
-    // Grab Willow Glen For Sale as featured property
+    // Grab Sienna Woods Ct as featured luxury property
     const featured = listingsData[0];
     const isSaved = favorites.includes(featured.id);
 
     target.innerHTML = `
-        <div class="featured-badge">Featured</div>
+        <div class="featured-badge">Featured Property</div>
         <button onclick="toggleFavorite(event, '${featured.id}')" class="fav-btn ${isSaved ? 'saved' : ''}" aria-label="Bookmark listing">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         </button>
@@ -303,8 +309,8 @@ function renderFeaturedProperty() {
                 </div>
             </div>
             <div class="listing-cta-row">
-                <button onclick="openPropertyDetails('${featured.id}')" class="btn-card-secondary">View Details</button>
-                <button onclick="bookShowing('${featured.address}')" class="btn-card-primary">Schedule Visit</button>
+                <button onclick="openPropertyDetails('${featured.id}')" class="btn-card-secondary">Review Brief</button>
+                <button onclick="bookShowing('${featured.address}')" class="btn-card-primary">Request Showing</button>
             </div>
         </div>
     `;
@@ -328,8 +334,8 @@ function renderListings() {
 
     if (filtered.length === 0) {
         container.innerHTML = `
-            <div style="text-align: center; padding: 40px 10px; color: var(--color-text-sub);">
-                <p>No listings match your search criteria.</p>
+            <div style="text-align: center; padding: 40px 10px; color: var(--color-text-sub); font-family: var(--font-heading); font-style: italic;">
+                <p>No selections match the current criteria.</p>
             </div>
         `;
         return;
@@ -337,7 +343,7 @@ function renderListings() {
 
     container.innerHTML = filtered.map(item => {
         const isSaved = favorites.includes(item.id);
-        const statusText = item.mode === 'sale' ? 'For Sale' : (item.mode === 'rent' ? 'For Rent' : 'Recently Sold');
+        const statusText = item.mode === 'sale' ? 'For Sale' : (item.mode === 'rent' ? 'For Lease' : 'Acquired');
         const badgeClass = item.mode;
         
         return `
@@ -354,7 +360,7 @@ function renderListings() {
                         <span class="listing-price">
                             $${item.price.toLocaleString()}${item.mode === 'rent' || (item.mode === 'sold' && item.type.includes('Rented')) ? '<span class="listing-price-sub">/mo</span>' : ''}
                         </span>
-                        <span style="font-size:0.7rem; color:var(--color-text-sub); font-weight:600;">MLS #${item.mls}</span>
+                        <span style="font-size:0.7rem; color:var(--color-text-sub); font-weight:600; font-family: var(--font-heading);">MLS #${item.mls}</span>
                     </div>
                     <div onclick="openPropertyDetails('${item.id}')">
                         <div class="listing-addr">${item.address}</div>
@@ -386,11 +392,11 @@ function renderListings() {
                     `}
                     
                     <div class="listing-cta-row">
-                        <button onclick="openPropertyDetails('${item.id}')" class="btn-card-secondary">Details</button>
+                        <button onclick="openPropertyDetails('${item.id}')" class="btn-card-secondary">Review Brief</button>
                         ${item.mode !== 'sold' ? `
-                            <button onclick="bookShowing('${item.address}')" class="btn-card-primary">Book Visit</button>
+                            <button onclick="bookShowing('${item.address}')" class="btn-card-primary">Request Showing</button>
                         ` : `
-                            <button onclick="calculateMortgageForPrice(${item.price})" class="btn-card-primary" style="background-color:#1E293B; border: 1px solid var(--border-color); color:var(--color-primary);">Calc Value</button>
+                            <button onclick="calculateMortgageForPrice(${item.price})" class="btn-card-primary" style="background-color:rgba(138, 28, 46, 0.05); border: 1px solid var(--border-color); color:var(--color-primary);">Financials</button>
                         `}
                     </div>
                 </div>
@@ -416,7 +422,7 @@ function renderFavorites() {
     emptyState.style.display = 'none';
 
     container.innerHTML = savedListings.map(item => {
-        const statusText = item.mode === 'sale' ? 'For Sale' : (item.mode === 'rent' ? 'For Rent' : 'Recently Sold');
+        const statusText = item.mode === 'sale' ? 'For Sale' : (item.mode === 'rent' ? 'For Lease' : 'Acquired');
         const badgeClass = item.mode;
         
         return `
@@ -431,18 +437,18 @@ function renderFavorites() {
                 <div class="listing-details">
                     <div class="price-row" onclick="openPropertyDetails('${item.id}')">
                         <span class="listing-price">$${item.price.toLocaleString()}${item.mode === 'rent' ? '<span class="listing-price-sub">/mo</span>' : ''}</span>
-                        <span style="font-size:0.75rem; color:var(--color-text-sub); font-weight:600;">MLS #${item.mls}</span>
+                        <span style="font-size:0.75rem; color:var(--color-text-sub); font-weight:600; font-family: var(--font-heading);">MLS #${item.mls}</span>
                     </div>
                     <div onclick="openPropertyDetails('${item.id}')">
                         <div class="listing-addr">${item.address}</div>
                         <div class="listing-subdiv">${item.subdivision}</div>
                     </div>
                     <div class="listing-cta-row">
-                        <button onclick="openPropertyDetails('${item.id}')" class="btn-card-secondary">Details</button>
+                        <button onclick="openPropertyDetails('${item.id}')" class="btn-card-secondary">Review Brief</button>
                         ${item.mode !== 'sold' ? `
-                            <button onclick="bookShowing('${item.address}')" class="btn-card-primary">Book Visit</button>
+                            <button onclick="bookShowing('${item.address}')" class="btn-card-primary">Request Showing</button>
                         ` : `
-                            <button onclick="calculateMortgageForPrice(${item.price})" class="btn-card-primary" style="background-color:#1E293B; color:var(--color-primary);">Calc Value</button>
+                            <button onclick="calculateMortgageForPrice(${item.price})" class="btn-card-primary" style="background-color:rgba(138, 28, 46, 0.05); color:var(--color-primary);">Financials</button>
                         `}
                     </div>
                 </div>
@@ -501,7 +507,7 @@ function openPropertyDetails(listingId) {
     if (!property) return;
     
     const isSaved = favorites.includes(property.id);
-    const statusLabel = property.mode === 'sale' ? 'For Sale' : (property.mode === 'rent' ? 'For Rent' : `Sold (${property.closedDate})`);
+    const statusLabel = property.mode === 'sale' ? 'For Sale' : (property.mode === 'rent' ? 'For Lease' : `Acquired (${property.closedDate})`);
     
     const sheetBody = document.getElementById('sheet-body-content');
     if (!sheetBody) return;
@@ -549,7 +555,7 @@ function openPropertyDetails(listingId) {
 
         <div class="info-section">
             <h3 class="section-title">Property Highlights</h3>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:0.78rem; background:rgba(255,255,255,0.02); padding:12px; border-radius:8px; border:1px solid var(--border-color);">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:0.78rem; background:rgba(0,0,0,0.02); padding:12px; border-radius:8px; border:1px solid var(--border-color);">
                 <div><strong>MLS ID:</strong> ${property.mls}</div>
                 <div><strong>Property Type:</strong> ${property.type}</div>
                 <div><strong>Year Built:</strong> ${property.built > 0 ? property.built : 'N/A'}</div>
@@ -558,7 +564,7 @@ function openPropertyDetails(listingId) {
         </div>
 
         <div class="info-section">
-            <h3 class="section-title">Description</h3>
+            <h3 class="section-title">Description Brief</h3>
             <p class="detail-desc-para">${property.description}</p>
         </div>
 
@@ -569,9 +575,9 @@ function openPropertyDetails(listingId) {
             </button>
             
             ${property.mode !== 'sold' ? `
-                <button onclick="closeDetailsSheet(); bookShowing('${property.address}');" class="btn-card-primary" style="padding:12px;">Book Consultation</button>
+                <button onclick="closeDetailsSheet(); bookShowing('${property.address}');" class="btn-card-primary" style="padding:12px;">Request Private Showing</button>
             ` : `
-                <button onclick="closeDetailsSheet(); calculateMortgageForPrice(${property.price});" class="btn-card-primary" style="padding:12px;">Estimate Payments</button>
+                <button onclick="closeDetailsSheet(); calculateMortgageForPrice(${property.price});" class="btn-card-primary" style="padding:12px;">Estimate Carry Costs</button>
             `}
         </div>
     `;
@@ -699,17 +705,40 @@ function initBookingForm() {
         dateInput.min = today;
     }
 
-    // Handle service change to hide/show property of interest field
+    // Handle service change to hide/show fields dynamically
     const serviceSelect = document.getElementById('book-service');
     const propertyGroup = document.getElementById('property-select-group');
-    if (serviceSelect && propertyGroup) {
+    const datetimeRow = document.getElementById('datetime-fields-row');
+    
+    if (serviceSelect && propertyGroup && datetimeRow) {
         serviceSelect.addEventListener('change', (e) => {
-            if (e.target.value === 'showing') {
+            const val = e.target.value;
+            
+            // Standard reset
+            document.getElementById('book-property-label').textContent = 'Property Address';
+            document.getElementById('book-property').placeholder = 'e.g., 5206 Willow Glen Dr';
+            
+            if (val === 'showing') {
                 propertyGroup.style.display = 'block';
                 document.getElementById('book-property').required = true;
+                datetimeRow.style.display = 'flex';
+                document.getElementById('book-date').required = true;
+                document.getElementById('book-time').required = true;
+            } else if (val === 'valuation') {
+                propertyGroup.style.display = 'block';
+                document.getElementById('book-property-label').textContent = 'Property Address to Evaluate';
+                document.getElementById('book-property').placeholder = 'e.g., 5206 Willow Glen Dr, Houston, TX 77033';
+                document.getElementById('book-property').required = true;
+                // Valuation is compiled offsite, hide appointment dates
+                datetimeRow.style.display = 'none';
+                document.getElementById('book-date').required = false;
+                document.getElementById('book-time').required = false;
             } else {
                 propertyGroup.style.display = 'none';
                 document.getElementById('book-property').required = false;
+                datetimeRow.style.display = 'flex';
+                document.getElementById('book-date').required = true;
+                document.getElementById('book-time').required = true;
             }
         });
     }
@@ -727,10 +756,11 @@ function initBookingForm() {
         const notes = document.getElementById('book-message').value;
 
         const serviceNames = {
-            showing: "Property Showing",
-            buy_consult: "Home Buyer Consultation",
-            sell_consult: "Home Seller Consultation",
-            general: "General Consultation"
+            showing: "Private Property Showing",
+            buy_consult: "Acquisition Consultation",
+            sell_consult: "Exclusive Listing Consultation",
+            valuation: "Home Valuation Request",
+            general: "Advisory Consultation"
         };
 
         // Create booking object
@@ -740,11 +770,11 @@ function initBookingForm() {
             phone,
             email,
             service: serviceNames[service] || service,
-            property: service === 'showing' ? property : '',
-            date,
-            time,
+            property: (service === 'showing' || service === 'valuation') ? property : '',
+            date: service !== 'valuation' ? date : '',
+            time: service !== 'valuation' ? time : '',
             notes,
-            status: "Pending Confirmation"
+            status: "Brief Staged / Pending Review"
         };
 
         // Save to state & storage
@@ -752,17 +782,31 @@ function initBookingForm() {
         localStorage.setItem('kameron_bookings', JSON.stringify(bookings));
 
         // Format dates nicely
-        const formattedDate = new Date(date).toLocaleDateString('en-US', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
+        let formattedDate = "";
+        if (newBooking.date) {
+            formattedDate = new Date(date).toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+        }
 
         // Set UI summaries
         document.getElementById('summary-type').textContent = newBooking.service;
-        document.getElementById('summary-date').textContent = formattedDate;
-        document.getElementById('summary-time').textContent = time;
+        
+        const dateLine = document.getElementById('summary-date-line');
+        const timeLine = document.getElementById('summary-time-line');
+        
+        if (service !== 'valuation') {
+            dateLine.style.display = 'block';
+            timeLine.style.display = 'block';
+            document.getElementById('summary-date').textContent = formattedDate;
+            document.getElementById('summary-time').textContent = time;
+        } else {
+            dateLine.style.display = 'none';
+            timeLine.style.display = 'none';
+        }
 
         const propRow = document.getElementById('summary-prop-row');
-        if (service === 'showing') {
+        if (service === 'showing' || service === 'valuation') {
             propRow.style.display = 'block';
             document.getElementById('summary-property').textContent = property;
         } else {
@@ -783,12 +827,41 @@ function bookShowing(propertyAddress) {
     const serviceSelect = document.getElementById('book-service');
     const propertyInput = document.getElementById('book-property');
     const propertyGroup = document.getElementById('property-select-group');
+    const datetimeRow = document.getElementById('datetime-fields-row');
     
-    if (serviceSelect && propertyInput && propertyGroup) {
+    if (serviceSelect && propertyInput && propertyGroup && datetimeRow) {
         serviceSelect.value = 'showing';
         propertyGroup.style.display = 'block';
+        document.getElementById('book-property-label').textContent = 'Property Address';
+        propertyInput.placeholder = 'e.g., 5206 Willow Glen Dr';
         propertyInput.value = propertyAddress;
         propertyInput.required = true;
+        
+        datetimeRow.style.display = 'flex';
+        document.getElementById('book-date').required = true;
+        document.getElementById('book-time').required = true;
+    }
+}
+
+function requestValuation() {
+    navigateTo('book');
+    const serviceSelect = document.getElementById('book-service');
+    const propertyInput = document.getElementById('book-property');
+    const propertyGroup = document.getElementById('property-select-group');
+    const datetimeRow = document.getElementById('datetime-fields-row');
+    
+    if (serviceSelect && propertyInput && propertyGroup && datetimeRow) {
+        serviceSelect.value = 'valuation';
+        propertyGroup.style.display = 'block';
+        document.getElementById('book-property-label').textContent = 'Property Address to Evaluate';
+        propertyInput.placeholder = 'e.g., 5206 Willow Glen Dr, Houston, TX 77033';
+        propertyInput.value = '';
+        propertyInput.required = true;
+        
+        // Hide date/time fields since valuation is conducted offline
+        datetimeRow.style.display = 'none';
+        document.getElementById('book-date').required = false;
+        document.getElementById('book-time').required = false;
     }
 }
 
@@ -799,6 +872,9 @@ function resetBookingForm() {
         form.style.display = 'block';
         document.getElementById('property-select-group').style.display = 'none';
         document.getElementById('book-property').required = false;
+        document.getElementById('datetime-fields-row').style.display = 'flex';
+        document.getElementById('book-date').required = true;
+        document.getElementById('book-time').required = true;
     }
     document.getElementById('booking-success-card').style.display = 'none';
 }
@@ -819,15 +895,21 @@ function renderBookedAppointments() {
     const sorted = [...bookings].reverse();
 
     listContainer.innerHTML = sorted.map(apt => {
-        const displayDate = new Date(apt.date).toLocaleDateString('en-US', {
-            month: 'short', day: 'numeric', year: 'numeric'
-        });
+        let detailsText = "";
+        if (apt.date) {
+            const displayDate = new Date(apt.date).toLocaleDateString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric'
+            });
+            detailsText = `📅 ${displayDate} at ${apt.time}`;
+        } else {
+            detailsText = `📑 Valuation Report Compile`;
+        }
         
         return `
             <div class="apt-card">
                 <div class="apt-info">
                     <h4>${apt.service}</h4>
-                    <p>📅 ${displayDate} at ${apt.time}</p>
+                    <p>${detailsText}</p>
                     ${apt.property ? `<p>🏠 Property: ${apt.property}</p>` : ''}
                 </div>
                 <span class="apt-status">${apt.status}</span>
@@ -836,12 +918,33 @@ function renderBookedAppointments() {
     }).join('');
 }
 
+// 9. OFF-MARKET GAZETTE FORM HANDLER
+function initGazetteForm() {
+    const form = document.getElementById('gazette-form');
+    if (!form) return;
+    
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('gazette-email');
+        const email = emailInput.value;
+        
+        let gazetteSubs = JSON.parse(localStorage.getItem('gazette_subscribers')) || [];
+        gazetteSubs.push({ email, timestamp: Date.now() });
+        localStorage.setItem('gazette_subscribers', JSON.stringify(gazetteSubs));
+        
+        form.style.display = 'none';
+        const success = document.getElementById('gazette-success');
+        if (success) success.style.display = 'block';
+    });
+}
+
 // Global exposure of navigation helpers for inline HTML button triggers
 window.navigateTo = navigateTo;
 window.toggleFavorite = toggleFavorite;
 window.openPropertyDetails = openPropertyDetails;
 window.closeDetailsSheet = closeDetailsSheet;
 window.bookShowing = bookShowing;
+window.requestValuation = requestValuation;
 window.resetBookingForm = resetBookingForm;
 window.calculateMortgageForPrice = calculateMortgageForPrice;
 window.updateSheetFavoriteBtn = updateSheetFavoriteBtn;
