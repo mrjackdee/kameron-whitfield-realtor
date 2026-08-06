@@ -190,10 +190,20 @@
                     <div class="info-section">
                         <h2 class="section-title">A Message From Kameron</h2>
                         <div class="video-container-wrapper">
-                            <video class="realtor-video" controls poster="luxury_houston_house.jpg">
-                                <source src="https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-interior-with-a-view-40742-large.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
+                            <div class="canvas-video-player" id="realtor-video-player">
+                                <canvas id="realtor-video-canvas" class="realtor-video-canvas"></canvas>
+                                <!-- Custom Controls Overlay -->
+                                <div class="canvas-video-controls">
+                                    <button class="video-control-btn" id="video-play-btn" aria-label="Play/Pause">
+                                        <svg class="play-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                                        <svg class="pause-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                                    </button>
+                                    <div class="video-progress-container">
+                                        <div class="video-progress-bar" id="video-progress"></div>
+                                    </div>
+                                    <div class="video-time-display" id="video-time">00:00</div>
+                                </div>
+                            </div>
                             <div class="video-overlay-text">
                                 <h3>Advisory Philosophy</h3>
                                 <p>"Empowering families, securing investments, and building Houston communities one home at a time."</p>

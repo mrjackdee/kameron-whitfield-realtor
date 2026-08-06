@@ -188,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initBookingForm();
     initGazetteForm();
     initPopupForm();
+    initVideoPlayer();
     updateFavoritesBadge();
     
     // Splash screen fadeout timer
@@ -1247,6 +1248,214 @@ function closeLegalModal() {
     }
 }
 
+// 14. INTERACTIVE CANVAS VIDEO PLAYER
+function initVideoPlayer() {
+    const canvas = document.getElementById('realtor-video-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const playBtn = document.getElementById('video-play-btn');
+    const progressBar = document.getElementById('video-progress');
+    const timeDisplay = document.getElementById('video-time');
+
+    // Set high-res internal canvas dimensions (16:9 ratio)
+    canvas.width = 1280;
+    canvas.height = 720;
+
+    // Load local generated image assets
+    const images = [];
+    const imageSources = ['luxury_houston_entrance.jpg', 'luxury_houston_house.jpg'];
+    let imagesLoaded = 0;
+
+    imageSources.forEach((src, index) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+            images[index] = img;
+            imagesLoaded++;
+            if (imagesLoaded === imageSources.length) {
+                // Pre-draw first frame
+                drawFrame(0);
+            }
+        };
+    });
+
+    // Playback state variables
+    let isPlaying = false;
+    let duration = 5000; // 5-second video teaser loop
+    let currentTime = 0;
+    let lastTime = 0;
+    let animationFrameId = null;
+
+    const subtitles = [
+        { start: 0, end: 1600, text: "Hello, I'm Kameron Whitfield with All City Real Estate." },
+        { start: 1600, end: 3400, text: "Empowering families to secure residential investments in Houston." },
+        { start: 3400, end: 5000, text: "Welcome to The Collection. Let's find your dream home together." }
+    ];
+
+    function drawFrame(ms) {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const currentT = ms % duration;
+        const index = currentT < duration / 2 ? 0 : 1;
+        const img = images[index];
+
+        if (img) {
+            // Draw background image with Ken Burns panning & zoom
+            let scale = 1.05;
+            let dx = 0;
+            let dy = 0;
+
+            const tSegment = (currentT % (duration / 2)) / (duration / 2); // 0 to 1 inside current segment
+            if (index === 0) {
+                // Zoom in and pan right
+                scale = 1.0 + tSegment * 0.08;
+                dx = -tSegment * 40;
+            } else {
+                // Zoom out and pan down
+                scale = 1.08 - tSegment * 0.08;
+                dy = -tSegment * 30;
+            }
+
+            // Draw image with calculated cropping bounds to fill canvas
+            const w = canvas.width;
+            const h = canvas.height;
+            const iw = img.width;
+            const ih = img.height;
+
+            const targetW = iw / scale;
+            const targetH = ih / scale;
+            const sx = (iw - targetW) / 2 + dx;
+            const sy = (ih - targetH) / 2 + dy;
+
+            ctx.drawImage(img, Math.max(0, sx), Math.max(0, sy), targetW, targetH, 0, 0, w, h);
+
+            // Apply cross-fade transition overlays at segment boundaries
+            const transitionWindow = 600; // 0.6s crossfade window
+            const firstHalfBound = duration / 2;
+
+            if (currentT > firstHalfBound - transitionWindow && currentT < firstHalfBound) {
+                // Crossfade from Image 0 to Image 1
+                const alpha = (currentT - (firstHalfBound - transitionWindow)) / transitionWindow;
+                const nextImg = images[1];
+                if (nextImg) {
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+                    ctx.drawImage(nextImg, 0, 0, w, h);
+                    ctx.restore();
+                }
+            } else if (currentT > duration - transitionWindow) {
+                // Crossfade from Image 1 back to Image 0
+                const alpha = (currentT - (duration - transitionWindow)) / transitionWindow;
+                const prevImg = images[0];
+                if (prevImg) {
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+                    ctx.drawImage(prevImg, 0, 0, w, h);
+                    ctx.restore();
+                }
+            }
+        } else {
+            // Fallback drawing if images not yet loaded
+            ctx.fillStyle = '#1F1916';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Draw subtitle band overlay
+        ctx.fillStyle = 'rgba(31, 25, 22, 0.75)';
+        ctx.fillRect(0, canvas.height - 110, canvas.width, 110);
+
+        // Find active subtitle text matching current time
+        const activeSub = subtitles.find(s => currentT >= s.start && currentT < s.end);
+        if (activeSub) {
+            ctx.fillStyle = '#FCFAF6';
+            ctx.font = '700 32px Outfit, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(activeSub.text, canvas.width / 2, canvas.height - 48);
+        }
+
+        // Draw a simulated pulsing "Live Visualizer" audio track animation at bottom left when playing
+        if (isPlaying) {
+            ctx.fillStyle = '#8A1C2E';
+            for (let i = 0; i < 8; i++) {
+                const barHeight = 10 + Math.sin((ms / 150) + i) * 15;
+                ctx.fillRect(30 + (i * 12), canvas.height - 150, 6, barHeight);
+            }
+        }
+    }
+
+    function tick(timestamp) {
+        if (!isPlaying) return;
+        if (!lastTime) lastTime = timestamp;
+
+        const delta = timestamp - lastTime;
+        lastTime = timestamp;
+
+        currentTime += delta;
+        if (currentTime >= duration) {
+            currentTime = 0; // Loop around
+        }
+
+        // Update progress bar
+        const progressPercent = (currentTime / duration) * 100;
+        if (progressBar) progressBar.style.width = `${progressPercent}%`;
+
+        // Update timer representation
+        const secs = Math.floor(currentTime / 1000);
+        const formatSecs = secs < 10 ? `0${secs}` : secs;
+        if (timeDisplay) timeDisplay.textContent = `00:${formatSecs}`;
+
+        drawFrame(currentTime);
+
+        animationFrameId = requestAnimationFrame(tick);
+    }
+
+    function play() {
+        isPlaying = true;
+        lastTime = 0;
+        if (playBtn) {
+            playBtn.querySelector('.play-icon').style.display = 'none';
+            playBtn.querySelector('.pause-icon').style.display = 'block';
+        }
+        animationFrameId = requestAnimationFrame(tick);
+    }
+
+    function pause() {
+        isPlaying = false;
+        if (playBtn) {
+            playBtn.querySelector('.play-icon').style.display = 'block';
+            playBtn.querySelector('.pause-icon').style.display = 'none';
+        }
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
+    }
+
+    if (playBtn) {
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                pause();
+            } else {
+                play();
+            }
+        });
+    }
+
+    // Allow scrubbing progress timeline
+    const progressTrack = document.querySelector('.video-progress-container');
+    if (progressTrack) {
+        progressTrack.addEventListener('click', (e) => {
+            const rect = progressTrack.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const pct = clickX / rect.width;
+            currentTime = pct * duration;
+            if (progressBar) progressBar.style.width = `${pct * 100}%`;
+            drawFrame(currentTime);
+        });
+    }
+}
+
 // Global exposure of navigation helpers for inline HTML button triggers
 window.navigateTo = navigateTo;
 window.toggleFavorite = toggleFavorite;
@@ -1265,3 +1474,4 @@ window.handleLoginSubmit = handleLoginSubmit;
 window.handleLogout = handleLogout;
 window.openLegalModal = openLegalModal;
 window.closeLegalModal = closeLegalModal;
+window.initVideoPlayer = initVideoPlayer;
