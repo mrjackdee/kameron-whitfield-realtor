@@ -15,6 +15,39 @@
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
+    <!-- Splash Screen overlay -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content">
+            <h1 class="splash-logo">Kameron Whitfield</h1>
+            <p class="splash-sub">All City Real Estate</p>
+            <div class="splash-loader">
+                <div class="splash-loader-bar"></div>
+            </div>
+            <span class="splash-loading-text">Loading Portfolio</span>
+        </div>
+    </div>
+
+    <!-- Lead Generation Popup Modal -->
+    <div id="lead-popup" class="lead-popup-modal" style="display: none;">
+        <div class="lead-popup-backdrop" onclick="closeLeadPopup()"></div>
+        <div class="lead-popup-content">
+            <button class="lead-popup-close" onclick="closeLeadPopup()" aria-label="Close popup">&times;</button>
+            <div class="lead-popup-header">
+                <h2>Partner with Kameron</h2>
+                <p>Houston's Premier Residential Advisory</p>
+            </div>
+            <p class="lead-popup-promo">Schedule a private showing or request a complimentary market evaluation. Enter your details below to get connected immediately.</p>
+            <form id="popup-lead-form" class="popup-lead-form">
+                <input type="text" id="popup-name" placeholder="Your Name" required>
+                <input type="tel" id="popup-phone" placeholder="Phone Number" required>
+                <button type="submit" class="btn-popup-submit">Request Consultation</button>
+            </form>
+            <div id="popup-lead-success" style="display: none; color: var(--color-success); font-weight: 600; text-align: center; margin-top: 12px; font-size: 0.88rem;">
+                ✓ Request received. We will connect shortly.
+            </div>
+        </div>
+    </div>
+
     <div class="app-shell">
         <!-- Top Sticky Header -->
         <header class="app-header">
@@ -73,7 +106,6 @@
                             <span class="realtor-tag">Residential Specialist</span>
                             <h1 class="realtor-name">Kameron Whitfield</h1>
                             <p class="realtor-creds">CPM • C.P.S. • CRP • C.S.S.</p>
-                            <div class="signature">Kameron Whitfield</div>
                         </div>
                     </div>
                 </div>

@@ -185,7 +185,25 @@ document.addEventListener('DOMContentLoaded', () => {
     initMortgageCalculator();
     initBookingForm();
     initGazetteForm();
+    initPopupForm();
     updateFavoritesBadge();
+    
+    // Splash screen fadeout timer
+    setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) {
+            splash.classList.add('fade-out');
+            setTimeout(() => splash.style.display = 'none', 600);
+        }
+        
+        // Open lead popup after splash finishes (e.g. 1.2s delay)
+        setTimeout(() => {
+            const hasSeenPopup = sessionStorage.getItem('seen_lead_popup');
+            if (!hasSeenPopup) {
+                openLeadPopup();
+            }
+        }, 1200);
+    }, 2000);
     
     // Toggle bio event
     const btnToggleBio = document.getElementById('btn-toggle-bio');
@@ -967,6 +985,52 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// 11. LEAD GENERATION POPUP MODAL DRIVERS
+function initPopupForm() {
+    const form = document.getElementById('popup-lead-form');
+    if (!form) return;
+    
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('popup-name').value;
+        const phone = document.getElementById('popup-phone').value;
+        
+        let popupLeads = JSON.parse(localStorage.getItem('popup_leads')) || [];
+        popupLeads.push({ name, phone, timestamp: Date.now() });
+        localStorage.setItem('popup_leads', JSON.stringify(popupLeads));
+        
+        form.style.display = 'none';
+        const successEl = document.getElementById('popup-lead-success');
+        if (successEl) successEl.style.display = 'block';
+        
+        setTimeout(() => {
+            closeLeadPopup();
+        }, 2200);
+    });
+}
+
+function openLeadPopup() {
+    const popup = document.getElementById('lead-popup');
+    if (popup) {
+        popup.style.display = 'flex';
+        // Add browser repaint tick to trigger slide-in CSS transitions smoothly
+        setTimeout(() => {
+            popup.classList.add('open');
+        }, 10);
+    }
+}
+
+function closeLeadPopup() {
+    const popup = document.getElementById('lead-popup');
+    if (popup) {
+        popup.classList.remove('open');
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 300);
+        sessionStorage.setItem('seen_lead_popup', 'true');
+    }
+}
+
 // Global exposure of navigation helpers for inline HTML button triggers
 window.navigateTo = navigateTo;
 window.toggleFavorite = toggleFavorite;
@@ -979,3 +1043,5 @@ window.calculateMortgageForPrice = calculateMortgageForPrice;
 window.updateSheetFavoriteBtn = updateSheetFavoriteBtn;
 window.toggleHeaderConnect = toggleHeaderConnect;
 window.copyBusinessCard = copyBusinessCard;
+window.openLeadPopup = openLeadPopup;
+window.closeLeadPopup = closeLeadPopup;
